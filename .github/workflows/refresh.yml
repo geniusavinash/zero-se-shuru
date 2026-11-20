@@ -40,7 +40,10 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      # npm install, not npm ci: the lockfile was written on Windows and lacks two Linux-only optional
+      # packages (@emnapi/*), which npm ci refuses (first Actions run, 2026-11-20). The lockfile change on
+      # the runner is undone so the data commit stays clean.
+      - run: npm install --no-audit --no-fund && git checkout -- package-lock.json
 
       - name: Refresh
         id: refresh
