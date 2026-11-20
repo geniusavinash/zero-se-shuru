@@ -1,0 +1,28 @@
+# Site settings and limits. Every number that decides what is shown lives here or in rules.yaml.
+name: Zero Se Shuru
+tagline: Real fresher jobs and internships in India, checked every day.
+# The address Cloudflare assigns to the Pages project (set after T3b).
+public_url: https://zero-se-shuru.pages.dev
+# The public repository; removal requests go to its issues page when no contact email is set.
+repo_url: https://github.com/geniusavinash/zero-se-shuru
+# Show the "Sign in" and "Admin" links (user and admin panels). The release switch for M17/M18.
+panels: true
+
+# A refresh that would show fewer posts than this fails: nothing is deployed and yesterday's page stays.
+min_shown: 150
+# Aggregator (Adzuna) posts older than this are dropped: an old aggregator listing is often closed.
+max_age_days: 60
+# A company-board post is open for as long as the board lists it, so the limit is looser. Decided
+# 2026-11-20 after the live count: 1,449 of 5,564 India posts were 60+ days old but still listed.
+max_age_days_direct: 180
+# LLM candidates per company per run (entry-word titles first, then newest). Drop to 20 if the ETA is long.
+max_candidates_per_company: 40
+max_shown_per_company: 20
+max_adzuna_shown: 400
+
+# In GitHub Actions a run tags at most this many new posts, and stops tagging after this many minutes.
+actions_max_new_tags: 300
+actions_max_minutes: 15
+
+# The page warns when its data is older than this.
+stale_after_hours: 30

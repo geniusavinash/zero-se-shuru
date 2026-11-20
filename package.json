@@ -1,0 +1,37 @@
+{
+  "name": "zero-se-shuru",
+  "version": "0.2.0",
+  "description": "Genuine India fresher jobs and internships, tagged by an LLM, refreshed daily.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "refresh": "tsx src/run.ts",
+    "serve": "tsx src/serve.ts",
+    "eval:sample": "tsx src/eval/sample.ts",
+    "eval:labels": "tsx src/eval/labels.ts",
+    "eval:score": "tsx src/eval/score.ts",
+    "cost": "tsx src/cost.ts",
+    "export": "tsx src/export.ts",
+    "scan": "tsx src/scan.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "he": "^2.0.0",
+    "openai": "^7.62.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/he": "^1.2.3",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1",
+    "wrangler": "^4.165.0"
+  }
+}

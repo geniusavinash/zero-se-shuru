@@ -1,0 +1,24 @@
+# Rules that cost nothing. They only drop a post or let it through to the LLM. Matching is on whole
+# words, case ignored. The final decision is made in src/decide.ts from the LLM's facts.
+
+# A post is shown only if its stated minimum experience is under this many years (src/decide.ts).
+experience_limit_years: 1
+
+title:
+  # A title with one of these is dropped before the LLM...
+  drop_words: [senior, sr, lead, leader, principal, staff, head, chief, director, vp, "vice president", architect, manager,
+               avp, dgm, ii, iii, iv, "sde 2", "sde ii", "sde-2", sde2, "sde 3", "sde iii", "sde-3", sde3, sde4, sde5]
+  # ...unless it also has one of these: then the LLM decides ("Head of Internships", "Management Trainee").
+  entry_words: [intern, interns, internship, internships, trainee, trainees, traineeship, apprentice, apprentices,
+                apprenticeship, fresher, freshers, graduate, graduates, "new grad", "fresh graduate", campus,
+                "entry level", "entry-level", junior, batch]
+  # Taken out of the title before the drop words are checked: these are entry-level or not senior.
+  neutral_phrases: ["associate product manager", "product manager i", "member of technical staff", "staff nurse",
+                    "lead generation", "lead gen", "lead sourcing"]
+  # "N+ years" or a range like "2-4 years" in the title, with N at or above this, is a drop.
+  min_years_in_title_to_drop: 2
+  # Placeholder or non-genuine posts, matched against the title.
+  junk_phrases: ["talent pool", "talent community", "general application", "future opportunities",
+                 "future opportunity", "open application", "don't see what you're looking for",
+                 "dont see what you're looking for", "walk-in", "walk in", "walkin", "registration fee",
+                 "pay to apply", "earn from home", "earn money from home"]

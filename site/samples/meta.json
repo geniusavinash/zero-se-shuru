@@ -1,0 +1,663 @@
+{
+  "site": {
+    "name": "Zero Se Shuru",
+    "tagline": "Real fresher jobs and internships in India, checked every day.",
+    "publicUrl": "https://zero-se-shuru.pages.dev",
+    "repoUrl": "https://github.com/example/zero-se-shuru",
+    "panels": true,
+    "contact": "removals@example.com",
+    "staleAfterHours": 30
+  },
+  "generatedAt": "2026-11-20T01:37:00Z",
+  "runId": "2026-11-20T01-07-00Z-schedule",
+  "trigger": "schedule",
+  "counts": {
+    "shown": 8,
+    "companies": 7,
+    "newToday": 1,
+    "duplicatesRemoved": 3,
+    "cityMismatch": 2
+  },
+  "funnel": {
+    "total": {
+      "read": 9800,
+      "india": 5400,
+      "candidates": 1900,
+      "tagged": 1890,
+      "eligible": 260,
+      "afterDedupe": 241,
+      "shown": 8
+    },
+    "bySource": {
+      "greenhouse": {
+        "read": 6000,
+        "india": 0,
+        "candidates": 0,
+        "tagged": 0,
+        "eligible": 0,
+        "afterDedupe": 0,
+        "shown": 3
+      },
+      "lever": {
+        "read": 2500,
+        "india": 0,
+        "candidates": 0,
+        "tagged": 0,
+        "eligible": 0,
+        "afterDedupe": 0,
+        "shown": 2
+      },
+      "ashby": {
+        "read": 700,
+        "india": 0,
+        "candidates": 0,
+        "tagged": 0,
+        "eligible": 0,
+        "afterDedupe": 0,
+        "shown": 1
+      },
+      "adzuna": {
+        "read": 600,
+        "india": 0,
+        "candidates": 0,
+        "tagged": 0,
+        "eligible": 0,
+        "afterDedupe": 0,
+        "shown": 2
+      }
+    }
+  },
+  "sources": [
+    {
+      "name": "greenhouse",
+      "display": "Greenhouse job boards",
+      "docs": "https://developers.greenhouse.io/job-board.html",
+      "terms": "https://developers.greenhouse.io/job-board.html",
+      "whyAllowed": "Documented public endpoint for published jobs.",
+      "attribution": "none required",
+      "boardsOk": 110,
+      "boardsFailed": 3,
+      "on": true
+    },
+    {
+      "name": "adzuna",
+      "display": "Adzuna",
+      "docs": "https://developer.adzuna.com/overview",
+      "terms": "https://developer.adzuna.com/docs/terms_of_service",
+      "whyAllowed": "Official API used under its terms, with its label on every listing.",
+      "attribution": "Jobs by Adzuna",
+      "boardsOk": 1,
+      "boardsFailed": 0,
+      "on": true
+    }
+  ],
+  "boards": [
+    {
+      "ats": "greenhouse",
+      "token": "samplelabs",
+      "company": "Sample Labs",
+      "on": true,
+      "ok": true,
+      "india": 40,
+      "candidates": 12,
+      "shown": 2
+    },
+    {
+      "ats": "lever",
+      "token": "samplepay",
+      "company": "Sample Pay",
+      "on": true,
+      "ok": false,
+      "reason": "HTTP 404",
+      "india": 0,
+      "candidates": 0,
+      "shown": 0
+    }
+  ],
+  "metrics": {
+    "asOfRun": "2026-11-20T10-30-00Z-local",
+    "model": "gpt-6-luna",
+    "promptVersion": "v1",
+    "accuracy": {
+      "both": {
+        "correct": 44,
+        "total": 50,
+        "low": 0.76,
+        "high": 0.95
+      },
+      "role": {
+        "correct": 47,
+        "total": 50,
+        "low": 0.84,
+        "high": 0.98
+      },
+      "city": {
+        "correct": 46,
+        "total": 50,
+        "low": 0.81,
+        "high": 0.97
+      }
+    },
+    "fresherShareBySource": {
+      "greenhouse": {
+        "correct": 18,
+        "total": 19,
+        "low": 0.75,
+        "high": 0.99
+      },
+      "adzuna": {
+        "correct": 25,
+        "total": 31,
+        "low": 0.63,
+        "high": 0.91
+      }
+    },
+    "costPer1000Tagged": 0.06,
+    "costPer1000Shown": 0.47
+  },
+  "runs": [
+    {
+      "id": "2026-11-20T01-07-00Z-schedule",
+      "startedAt": "2026-11-20T01:07:00Z",
+      "trigger": "schedule",
+      "ok": true,
+      "shown": 8,
+      "newPosts": 1,
+      "llmCalls": 41,
+      "costUsd": 0.002
+    },
+    {
+      "id": "2026-11-19T13-37-00Z-schedule",
+      "startedAt": "2026-11-19T13:37:00Z",
+      "trigger": "schedule",
+      "ok": false,
+      "shown": 0,
+      "newPosts": 0,
+      "llmCalls": 0,
+      "costUsd": 0,
+      "blockedReason": "fewer than 150 posts would be shown"
+    }
+  ],
+  "roles": [
+    {
+      "id": "software_development",
+      "name": "Software development"
+    },
+    {
+      "id": "data_analytics_ai",
+      "name": "Data, analytics and AI"
+    },
+    {
+      "id": "qa_testing",
+      "name": "QA and testing"
+    },
+    {
+      "id": "it_cloud_security",
+      "name": "IT, cloud and security"
+    },
+    {
+      "id": "non_software_engineering",
+      "name": "Engineering (non-software)"
+    },
+    {
+      "id": "design_creative",
+      "name": "Design and creative"
+    },
+    {
+      "id": "product_project",
+      "name": "Product and project"
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing"
+    },
+    {
+      "id": "content_writing",
+      "name": "Content and writing"
+    },
+    {
+      "id": "sales_bd",
+      "name": "Sales and business development"
+    },
+    {
+      "id": "customer_support",
+      "name": "Customer support"
+    },
+    {
+      "id": "operations_admin",
+      "name": "Operations and admin"
+    },
+    {
+      "id": "finance_accounting",
+      "name": "Finance and accounting"
+    },
+    {
+      "id": "hr_recruitment",
+      "name": "HR and recruitment"
+    },
+    {
+      "id": "education_research",
+      "name": "Education and research"
+    },
+    {
+      "id": "legal_compliance",
+      "name": "Legal and compliance"
+    },
+    {
+      "id": "other",
+      "name": "Other"
+    }
+  ],
+  "cities": [
+    {
+      "id": "bengaluru",
+      "name": "Bengaluru",
+      "aliases": [
+        "Bangalore",
+        "Banglore",
+        "Bengalore",
+        "Bengalru",
+        "BLR",
+        "Whitefield",
+        "Electronic City",
+        "Koramangala",
+        "HSR Layout"
+      ]
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "aliases": [
+        "Bombay",
+        "Andheri",
+        "Powai",
+        "BKC",
+        "Lower Parel",
+        "Goregaon"
+      ]
+    },
+    {
+      "id": "navi_mumbai",
+      "name": "Navi Mumbai",
+      "aliases": [
+        "Vashi",
+        "Airoli",
+        "Belapur",
+        "Kharghar"
+      ]
+    },
+    {
+      "id": "thane",
+      "name": "Thane",
+      "aliases": []
+    },
+    {
+      "id": "delhi",
+      "name": "Delhi",
+      "aliases": [
+        "New Delhi",
+        "Okhla"
+      ]
+    },
+    {
+      "id": "gurugram",
+      "name": "Gurugram",
+      "aliases": [
+        "Gurgaon",
+        "Udyog Vihar"
+      ]
+    },
+    {
+      "id": "noida",
+      "name": "Noida",
+      "aliases": [
+        "Gautam Budh Nagar"
+      ]
+    },
+    {
+      "id": "greater_noida",
+      "name": "Greater Noida",
+      "aliases": []
+    },
+    {
+      "id": "ghaziabad",
+      "name": "Ghaziabad",
+      "aliases": [
+        "Indirapuram"
+      ]
+    },
+    {
+      "id": "faridabad",
+      "name": "Faridabad",
+      "aliases": []
+    },
+    {
+      "id": "hyderabad",
+      "name": "Hyderabad",
+      "aliases": [
+        "Hydrabad",
+        "Secunderabad",
+        "HITEC City",
+        "Hitech City",
+        "Gachibowli",
+        "Madhapur"
+      ]
+    },
+    {
+      "id": "chennai",
+      "name": "Chennai",
+      "aliases": [
+        "Madras",
+        "Guindy",
+        "Sholinganallur"
+      ]
+    },
+    {
+      "id": "pune",
+      "name": "Pune",
+      "aliases": [
+        "Hinjewadi",
+        "Kharadi",
+        "Baner",
+        "Pimpri-Chinchwad",
+        "Pimpri Chinchwad"
+      ]
+    },
+    {
+      "id": "kolkata",
+      "name": "Kolkata",
+      "aliases": [
+        "Calcutta"
+      ]
+    },
+    {
+      "id": "ahmedabad",
+      "name": "Ahmedabad",
+      "aliases": [
+        "Ahmehdabad"
+      ]
+    },
+    {
+      "id": "gandhinagar",
+      "name": "Gandhinagar",
+      "aliases": [
+        "GIFT City"
+      ]
+    },
+    {
+      "id": "chandigarh",
+      "name": "Chandigarh",
+      "aliases": []
+    },
+    {
+      "id": "mohali",
+      "name": "Mohali",
+      "aliases": [
+        "SAS Nagar"
+      ]
+    },
+    {
+      "id": "panchkula",
+      "name": "Panchkula",
+      "aliases": []
+    },
+    {
+      "id": "kochi",
+      "name": "Kochi",
+      "aliases": [
+        "Cochin",
+        "Ernakulam",
+        "Kakkanad"
+      ]
+    },
+    {
+      "id": "thiruvananthapuram",
+      "name": "Thiruvananthapuram",
+      "aliases": [
+        "Trivandrum",
+        "Trivendrum"
+      ]
+    },
+    {
+      "id": "coimbatore",
+      "name": "Coimbatore",
+      "aliases": []
+    },
+    {
+      "id": "visakhapatnam",
+      "name": "Visakhapatnam",
+      "aliases": [
+        "Vizag",
+        "Vishakhapatnam"
+      ]
+    },
+    {
+      "id": "bhubaneswar",
+      "name": "Bhubaneswar",
+      "aliases": [
+        "Bhubaneshwar"
+      ]
+    },
+    {
+      "id": "guwahati",
+      "name": "Guwahati",
+      "aliases": []
+    },
+    {
+      "id": "vadodara",
+      "name": "Vadodara",
+      "aliases": [
+        "Baroda"
+      ]
+    },
+    {
+      "id": "nashik",
+      "name": "Nashik",
+      "aliases": []
+    },
+    {
+      "id": "mysuru",
+      "name": "Mysuru",
+      "aliases": [
+        "Mysore"
+      ]
+    },
+    {
+      "id": "mangaluru",
+      "name": "Mangaluru",
+      "aliases": [
+        "Mangalore"
+      ]
+    },
+    {
+      "id": "hubballi",
+      "name": "Hubballi",
+      "aliases": [
+        "Hubli"
+      ]
+    },
+    {
+      "id": "belagavi",
+      "name": "Belagavi",
+      "aliases": [
+        "Belgaum"
+      ]
+    },
+    {
+      "id": "tiruchirappalli",
+      "name": "Tiruchirappalli",
+      "aliases": [
+        "Trichy"
+      ]
+    },
+    {
+      "id": "kozhikode",
+      "name": "Kozhikode",
+      "aliases": [
+        "Calicut"
+      ]
+    },
+    {
+      "id": "varanasi",
+      "name": "Varanasi",
+      "aliases": []
+    },
+    {
+      "id": "prayagraj",
+      "name": "Prayagraj",
+      "aliases": [
+        "Allahabad"
+      ]
+    },
+    {
+      "id": "puducherry",
+      "name": "Puducherry",
+      "aliases": [
+        "Pondicherry"
+      ]
+    },
+    {
+      "id": "goa",
+      "name": "Goa",
+      "aliases": [
+        "Panaji",
+        "Panjim"
+      ]
+    },
+    {
+      "id": "jaipur",
+      "name": "Jaipur",
+      "aliases": []
+    },
+    {
+      "id": "lucknow",
+      "name": "Lucknow",
+      "aliases": []
+    },
+    {
+      "id": "indore",
+      "name": "Indore",
+      "aliases": []
+    },
+    {
+      "id": "bhopal",
+      "name": "Bhopal",
+      "aliases": []
+    },
+    {
+      "id": "nagpur",
+      "name": "Nagpur",
+      "aliases": []
+    },
+    {
+      "id": "surat",
+      "name": "Surat",
+      "aliases": []
+    },
+    {
+      "id": "patna",
+      "name": "Patna",
+      "aliases": []
+    },
+    {
+      "id": "ranchi",
+      "name": "Ranchi",
+      "aliases": []
+    },
+    {
+      "id": "raipur",
+      "name": "Raipur",
+      "aliases": []
+    },
+    {
+      "id": "kanpur",
+      "name": "Kanpur",
+      "aliases": []
+    },
+    {
+      "id": "agra",
+      "name": "Agra",
+      "aliases": []
+    },
+    {
+      "id": "ludhiana",
+      "name": "Ludhiana",
+      "aliases": []
+    },
+    {
+      "id": "amritsar",
+      "name": "Amritsar",
+      "aliases": []
+    },
+    {
+      "id": "dehradun",
+      "name": "Dehradun",
+      "aliases": []
+    },
+    {
+      "id": "udaipur",
+      "name": "Udaipur",
+      "aliases": []
+    },
+    {
+      "id": "jodhpur",
+      "name": "Jodhpur",
+      "aliases": []
+    },
+    {
+      "id": "vijayawada",
+      "name": "Vijayawada",
+      "aliases": [
+        "Vijaywada"
+      ]
+    },
+    {
+      "id": "madurai",
+      "name": "Madurai",
+      "aliases": []
+    },
+    {
+      "id": "jamshedpur",
+      "name": "Jamshedpur",
+      "aliases": []
+    },
+    {
+      "id": "delhi_ncr",
+      "name": "Delhi NCR",
+      "aliases": [
+        "Delhi NCR",
+        "Delhi-NCR",
+        "NCR"
+      ]
+    },
+    {
+      "id": "other_india",
+      "name": "Other India",
+      "aliases": []
+    }
+  ],
+  "metroGroups": [
+    {
+      "id": "delhi_ncr_region",
+      "name": "Delhi NCR",
+      "cities": [
+        "delhi",
+        "gurugram",
+        "noida",
+        "greater_noida",
+        "ghaziabad",
+        "faridabad",
+        "delhi_ncr"
+      ]
+    },
+    {
+      "id": "mumbai_region",
+      "name": "Mumbai region",
+      "cities": [
+        "mumbai",
+        "navi_mumbai",
+        "thane"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "key": "lever:samplepay:a1",
+    "title": "Data Analyst - Freshers",
+    "company": "Sample Pay",
+    "source": "lever",
+    "url": "https://example.com/jobs/a1",
+    "reason": "city_mismatch",
+    "role": "data_analytics_ai",
+    "llmCities": [
+      "noida"
+    ],
+    "ruleCities": [
+      "noida",
+      "gurugram"
+    ]
+  },
+  {
+    "key": "greenhouse:samplecloud:2003",
+    "title": "Cloud Support Intern",
+    "company": "Sample Cloud",
+    "source": "greenhouse",
+    "url": "https://example.com/jobs/2003",
+    "reason": "untagged",
+    "llmCities": [],
+    "ruleCities": [
+      "hyderabad"
+    ]
+  }
+]

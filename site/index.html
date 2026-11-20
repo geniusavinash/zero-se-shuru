@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co; img-src 'self' data:; style-src 'self'">
+  <title>Zero Se Shuru — Fresher jobs in India</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="js/config.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to jobs</a>
+  <header class="masthead">
+    <div class="wrap header-row">
+      <div><p class="brand" id="brand">Zero Se Shuru</p><p id="tagline">Fresher jobs and internships in India.</p></div>
+      <nav id="panel-links" aria-label="Account" hidden><a href="me.html">Sign in</a><a href="admin.html">Admin</a></nav>
+    </div>
+  </header>
+  <main id="main" class="wrap" tabindex="-1">
+    <section class="intro" aria-labelledby="headline">
+      <p class="eyebrow">India · Early careers</p>
+      <h1 id="headline">Find your first role.</h1>
+      <p>Browse fresher jobs, internships and apprenticeships. See why each post made the list.</p>
+      <div id="strip" class="strip" aria-label="Listing and refresh figures"></div>
+      <p id="stale" class="notice" hidden></p>
+      <p id="data-errors" class="error" role="status"></p>
+    </section>
+    <section aria-labelledby="browse-title">
+      <h2 id="browse-title">Browse openings</h2>
+      <form id="filters" class="surface filters" aria-label="Filter jobs">
+        <label class="wide">Search<input id="q" name="q" type="search" placeholder="Try data analyst or Bangalore"></label>
+        <label>Role<select id="role" name="role"><option value="">All roles</option></select></label>
+        <label>City or metro<select id="city" name="city"><option value="">All cities</option></select></label>
+        <label>Job type<select id="type" name="type"><option value="">All job types</option></select></label>
+        <label>Source type<select id="source" name="source"><option value="">All sources</option><option value="company">Company site</option><option value="adzuna">Adzuna</option></select></label>
+        <div class="toolbar wide">
+          <label class="check"><input id="recent" name="recent" type="checkbox"> Posted within 7 days</label>
+          <label class="check"><input id="remote" name="remote" type="checkbox"> Remote only</label>
+          <button id="clear" type="button">Clear</button>
+        </div>
+      </form>
+      <p id="result-count" class="muted" role="status">Loading jobs…</p>
+      <p id="save-status" class="feedback" role="status"></p>
+      <div id="jobs" class="cards"></div>
+      <button id="more" class="more" type="button" hidden>Show more</button>
+    </section>
+    <section id="how" class="evidence" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+      <ol>
+        <li>Read published openings from permitted APIs.</li>
+        <li>Screen for India, freshness and obvious exclusions.</li>
+        <li>Ask the model to tag roles and cities and report eligibility facts.</li>
+        <li>Apply fresher eligibility rules and flag disagreements for review.</li>
+        <li>Merge duplicate listings while keeping city-specific apply links.</li>
+        <li>Publish the list and its evidence after a successful refresh.</li>
+      </ol>
+      <div id="evidence"></div>
+    </section>
+  </main>
+</body>
+</html>

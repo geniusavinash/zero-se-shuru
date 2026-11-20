@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.cache/
+site/data/
+site/js/config.js
+eval/private_labels.csv
+*.log

@@ -1,0 +1,31 @@
+[
+ {
+  "id": "2026-11-20T08-23-38Z-local",
+  "startedAt": "2026-11-20T08:23:38.857Z",
+  "finishedAt": "2026-11-20T08:30:56.769Z",
+  "trigger": "local",
+  "ok": false,
+  "blockedReason": "only 93 posts would be shown (minimum 150)",
+  "counts": {
+   "read": 23003,
+   "india": 5564,
+   "candidates": 1125,
+   "tagged": 1121,
+   "eligible": 100,
+   "afterDedupe": 93,
+   "shown": 93,
+   "duplicates": 7,
+   "cityMismatch": 12
+  },
+  "perSource": {},
+  "llm": {
+   "calls": 1145,
+   "cacheHits": 120,
+   "failed": 2,
+   "input": 2714599,
+   "cachedInput": 2397763,
+   "output": 136555,
+   "costUsd": 0.12393873000000005
+  }
+ }
+]

@@ -1,0 +1,24 @@
+# The tagging model. Changing the model or the prompt version means re-tagging (both are in the cache key).
+provider: azure_openai
+# Azure OpenAI v1 endpoint (OpenAI-compatible). The endpoint comes from AZURE_OPENAI_BASE_URL
+# (https://<resource>.openai.azure.com/openai/v1/) and the key from AZURE_OPENAI_API_KEY.
+# The Azure deployment name is the model name.
+model_id: gpt-6-luna
+reasoning_effort: low
+# Reasoning tokens count toward this limit.
+max_output_tokens: 1000
+prompt_file: prompts/tag.md
+prompt_version: v1
+
+# Pacing. Azure reported 300 requests and 300,000 tokens per minute for this deployment (2026-11-20);
+# the run stays under both and slows down if the x-ratelimit-* headers say so.
+rpm: 240
+tpm: 240000
+concurrency: 8
+
+# USD per million tokens, from the owner's Azure price sheet (2026-11-20). Confirm in the Azure portal
+# before reporting numbers.
+prices:
+  input: 0.10
+  cached_input: 0.01
+  output: 0.50

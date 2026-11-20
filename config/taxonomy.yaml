@@ -1,0 +1,353 @@
+# The one list of roles and cities (reused from v1; 17 roles in v2). The prompt, the schema, the location
+# rule, the page filters and the evaluation all read this file. Ids never change once the 50 are drawn.
+
+roles:
+  - id: software_development
+    name: Software development
+    kind: technical
+    definition: Builds software, web, backend, frontend, mobile, full stack.
+    examples: [SDE Intern, React Developer]
+  - id: data_analytics_ai
+    name: Data, analytics and AI
+    kind: technical
+    definition: Analyses data or builds data, ML or GenAI systems.
+    examples: [Data Analyst, ML Engineer Intern]
+  - id: qa_testing
+    name: QA and testing
+    kind: technical
+    definition: Tests software, manual or automated.
+    examples: [QA Engineer, SDET]
+  - id: it_cloud_security
+    name: IT, cloud and security
+    kind: technical
+    definition: "Runs systems: DevOps, cloud, networks, IT helpdesk, security."
+    examples: [DevOps Engineer, SOC Analyst]
+  - id: non_software_engineering
+    name: Engineering (non-software)
+    kind: technical
+    definition: Mechanical, electrical, electronics, civil, chemical, embedded, VLSI, architecture.
+    examples: ["Graduate Engineer Trainee (Mechanical)", Embedded Engineer]
+  - id: design_creative
+    name: Design and creative
+    kind: non_technical
+    definition: Visual and experience design, video, animation.
+    examples: [UI/UX Designer, Video Editor]
+  - id: product_project
+    name: Product and project
+    kind: non_technical
+    definition: Product, programme or project coordination.
+    examples: [Product Analyst, Project Coordinator]
+  - id: marketing
+    name: Marketing
+    kind: non_technical
+    definition: Brand, digital, social, SEO, performance, PR.
+    examples: [Digital Marketing Intern, SEO Executive]
+  - id: content_writing
+    name: Content and writing
+    kind: non_technical
+    definition: Writes or edits text.
+    examples: [Content Writer, Technical Writer]
+  - id: sales_bd
+    name: Sales and business development
+    kind: non_technical
+    definition: Sells or generates leads against targets.
+    examples: [Business Development Executive, Inside Sales]
+  - id: customer_support
+    name: Customer support
+    kind: non_technical
+    definition: Serves existing customers, by voice or chat.
+    examples: [Customer Support Executive, Customer Success Associate]
+  - id: operations_admin
+    name: Operations and admin
+    kind: non_technical
+    definition: "Runs day-to-day processes: operations, logistics, procurement, back office."
+    examples: [Operations Executive, Supply Chain Trainee]
+  - id: finance_accounting
+    name: Finance and accounting
+    kind: non_technical
+    definition: Accounting, audit, tax, banking, financial analysis.
+    examples: [Accounts Executive, Article Assistant]
+  - id: hr_recruitment
+    name: HR and recruitment
+    kind: non_technical
+    definition: Hiring and people operations.
+    examples: [HR Intern, Talent Acquisition Associate]
+  - id: education_research
+    name: Education and research
+    kind: non_technical
+    definition: Teaching, training, academic content, university or lab assistants.
+    examples: [Subject Matter Expert, Research Assistant]
+  - id: legal_compliance
+    name: Legal and compliance
+    kind: non_technical
+    definition: Law, contracts, compliance, company secretarial.
+    examples: [Legal Intern, Compliance Analyst]
+  - id: other
+    name: Other
+    kind: none
+    definition: The role fits none of the above, or the text is too thin to decide.
+    examples: []
+
+tie_breaks:
+  - Judge by the work, not the employer's industry. Title first; a specific description wins over a vague title.
+  - Business Analyst is data_analytics_ai unless the work is requirements and coordination, then product_project.
+  - Targets and leads mean sales_bd; campaigns and SEO mean marketing; edtech counsellor roles are sales_bd.
+  - Customer-facing technical support is customer_support; internal helpdesk and cloud support are it_cloud_security.
+  - A UI developer who codes is software_development; a UI/UX designer is design_creative.
+  - ML or data work is data_analytics_ai; building product features that call an AI API is software_development.
+  - Embedded, firmware and VLSI are non_software_engineering. A software role on a team called "core" is still software_development.
+  - "Research takes its field: ML research is data_analytics_ai, market research is marketing."
+  - Strategy, consulting, founder's office and trainee posts with no stated function are other.
+  - A post listing several roles takes the first or most emphasised one.
+
+# The city's own name is always an alias. "aliases" count anywhere in a location field.
+# "context_aliases" count only in a field that is already India by another signal, and never in the description.
+cities:
+  - { id: bengaluru, name: Bengaluru, aliases: [Bangalore, Banglore, Bengalore, Bengalru, BLR, Whitefield, Electronic City, Koramangala, HSR Layout] }
+  - { id: mumbai, name: Mumbai, aliases: [Bombay, Andheri, Powai, BKC, Lower Parel, Goregaon] }
+  - { id: navi_mumbai, name: Navi Mumbai, aliases: [Vashi, Airoli, Belapur, Kharghar] }
+  - { id: thane, name: Thane, aliases: [] }
+  - { id: delhi, name: Delhi, aliases: [New Delhi, Okhla], context_aliases: [Saket, Dwarka] }
+  - { id: gurugram, name: Gurugram, aliases: [Gurgaon, Udyog Vihar] }
+  - { id: noida, name: Noida, aliases: [Gautam Budh Nagar] }
+  - { id: greater_noida, name: Greater Noida, aliases: [] }
+  - { id: ghaziabad, name: Ghaziabad, aliases: [Indirapuram] }
+  - { id: faridabad, name: Faridabad, aliases: [] }
+  - { id: hyderabad, name: Hyderabad, aliases: [Hydrabad, Secunderabad, HITEC City, Hitech City, Gachibowli, Madhapur] }
+  - { id: chennai, name: Chennai, aliases: [Madras, Guindy, Sholinganallur], context_aliases: [OMR] }
+  - { id: pune, name: Pune, aliases: [Hinjewadi, Kharadi, Baner, Pimpri-Chinchwad, Pimpri Chinchwad] }
+  - { id: kolkata, name: Kolkata, aliases: [Calcutta], context_aliases: [Salt Lake, Sector V, New Town] }
+  - { id: ahmedabad, name: Ahmedabad, aliases: [Ahmehdabad] }
+  - { id: gandhinagar, name: Gandhinagar, aliases: [GIFT City] }
+  - { id: chandigarh, name: Chandigarh, aliases: [] }
+  - { id: mohali, name: Mohali, aliases: [SAS Nagar] }
+  - { id: panchkula, name: Panchkula, aliases: [] }
+  - { id: kochi, name: Kochi, aliases: [Cochin, Ernakulam, Kakkanad] }
+  - { id: thiruvananthapuram, name: Thiruvananthapuram, aliases: [Trivandrum, Trivendrum] }
+  - { id: coimbatore, name: Coimbatore, aliases: [] }
+  - { id: visakhapatnam, name: Visakhapatnam, aliases: [Vizag, Vishakhapatnam] }
+  - { id: bhubaneswar, name: Bhubaneswar, aliases: [Bhubaneshwar] }
+  - { id: guwahati, name: Guwahati, aliases: [] }
+  - { id: vadodara, name: Vadodara, aliases: [Baroda] }
+  - { id: nashik, name: Nashik, aliases: [] }
+  - { id: mysuru, name: Mysuru, aliases: [Mysore] }
+  - { id: mangaluru, name: Mangaluru, aliases: [Mangalore] }
+  - { id: hubballi, name: Hubballi, aliases: [Hubli] }
+  - { id: belagavi, name: Belagavi, aliases: [Belgaum] }
+  - { id: tiruchirappalli, name: Tiruchirappalli, aliases: [Trichy] }
+  - { id: kozhikode, name: Kozhikode, aliases: [Calicut] }
+  - { id: varanasi, name: Varanasi, aliases: [] }
+  - { id: prayagraj, name: Prayagraj, aliases: [Allahabad] }
+  - { id: puducherry, name: Puducherry, aliases: [Pondicherry] }
+  - { id: goa, name: Goa, aliases: [Panaji, Panjim] }
+  - { id: jaipur, name: Jaipur, aliases: [] }
+  - { id: lucknow, name: Lucknow, aliases: [] }
+  - { id: indore, name: Indore, aliases: [] }
+  - { id: bhopal, name: Bhopal, aliases: [] }
+  - { id: nagpur, name: Nagpur, aliases: [] }
+  - { id: surat, name: Surat, aliases: [] }
+  - { id: patna, name: Patna, aliases: [] }
+  - { id: ranchi, name: Ranchi, aliases: [] }
+  - { id: raipur, name: Raipur, aliases: [] }
+  - { id: kanpur, name: Kanpur, aliases: [] }
+  - { id: agra, name: Agra, aliases: [] }
+  - { id: ludhiana, name: Ludhiana, aliases: [] }
+  - { id: amritsar, name: Amritsar, aliases: [] }
+  - { id: dehradun, name: Dehradun, aliases: [] }
+  - { id: udaipur, name: Udaipur, aliases: [] }
+  - { id: jodhpur, name: Jodhpur, aliases: [] }
+  - { id: vijayawada, name: Vijayawada, aliases: [Vijaywada] }
+  - { id: madurai, name: Madurai, aliases: [] }
+  - { id: jamshedpur, name: Jamshedpur, aliases: [] }
+
+# Not real cities. delhi_ncr: the region stated with no city. other_india: a named Indian place not in the list.
+special_cities:
+  - { id: delhi_ncr, name: Delhi NCR, aliases: [Delhi NCR, Delhi-NCR, NCR] }
+  - { id: other_india, name: Other India, aliases: [] }
+
+# Made in code, never by the LLM.
+metro_groups:
+  - { id: delhi_ncr_region, name: Delhi NCR, cities: [delhi, gurugram, noida, greater_noida, ghaziabad, faridabad, delhi_ncr] }
+  - { id: mumbai_region, name: Mumbai region, cities: [mumbai, navi_mumbai, thane] }
+
+# The six largest metros, for the page's "outside the six largest metros" count: group ids or city ids.
+top_metros: [delhi_ncr_region, mumbai_region, bengaluru, hyderabad, chennai, pune]
+
+# A location field that names one of these in full is in India (Punjab only with other India context).
+states:
+  - Andhra Pradesh
+  - Arunachal Pradesh
+  - Assam
+  - Bihar
+  - Chhattisgarh
+  - Goa
+  - Gujarat
+  - Haryana
+  - Himachal Pradesh
+  - Jharkhand
+  - Karnataka
+  - Kerala
+  - Madhya Pradesh
+  - Maharashtra
+  - Manipur
+  - Meghalaya
+  - Mizoram
+  - Nagaland
+  - Odisha
+  - Orissa
+  - Punjab
+  - Rajasthan
+  - Sikkim
+  - Tamil Nadu
+  - Tamilnadu
+  - Telangana
+  - Tripura
+  - Uttar Pradesh
+  - Uttarakhand
+  - West Bengal
+  - Jammu and Kashmir
+  - Ladakh
+  - Andaman and Nicobar Islands
+  - Lakshadweep
+  # Spellings seen on company boards.
+  - "Jammu & Kashmir"
+  - Telegana
+  - Uttrakhand
+  - Uttrakhannd
+  - Orrissa
+  - Himachal Padesh
+  - Chattisgarh
+  - Gujrat
+  - Andra Pradesh
+
+# These count as India only beside the word India, an Indian state, or another Indian city in the same field.
+needs_india_context: [NCR, Punjab, Salem]
+
+# Delhi and Hyderabad are also places abroad: they do not count when the same field has a foreign marker.
+# A city found only through an alias (Whitefield, Madras) is guarded the same way, in code.
+foreign_guard_cities: [delhi, hyderabad]
+
+foreign_markers:
+  countries:
+    - United States
+    - United States of America
+    - USA
+    # Read as a whole word, and only in location fields: "Delhi, US", "Remote - US".
+    - US
+    - U.S.
+    - U.S.A.
+    - United Kingdom
+    - UK
+    - England
+    - Scotland
+    - Canada
+    - Australia
+    - New Zealand
+    - Singapore
+    - Philippines
+    - Malaysia
+    - Indonesia
+    - Vietnam
+    - Thailand
+    - Japan
+    - China
+    - Hong Kong
+    - Taiwan
+    - South Korea
+    - Pakistan
+    - Bangladesh
+    - Sri Lanka
+    - Nepal
+    - United Arab Emirates
+    - UAE
+    - Saudi Arabia
+    - Qatar
+    - Israel
+    - Turkey
+    - Egypt
+    - Nigeria
+    - Kenya
+    - South Africa
+    - Germany
+    - France
+    - Netherlands
+    - Belgium
+    - Ireland
+    - Spain
+    - Portugal
+    - Italy
+    - Switzerland
+    - Austria
+    - Poland
+    - Romania
+    - Bulgaria
+    - Czech Republic
+    - Hungary
+    - Sweden
+    - Norway
+    - Denmark
+    - Finland
+    - Ukraine
+    - Mexico
+    - Brazil
+    - Argentina
+    - Colombia
+    - Chile
+    - Costa Rica
+  us_states:
+    - Alabama
+    - Alaska
+    - Arizona
+    - Arkansas
+    - California
+    - Colorado
+    - Connecticut
+    - Delaware
+    - Florida
+    - Georgia
+    - Hawaii
+    - Idaho
+    - Illinois
+    - Indiana
+    - Iowa
+    - Kansas
+    - Kentucky
+    - Louisiana
+    - Maine
+    - Maryland
+    - Massachusetts
+    - Michigan
+    - Minnesota
+    - Mississippi
+    - Missouri
+    - Montana
+    - Nebraska
+    - Nevada
+    - New Hampshire
+    - New Jersey
+    - New Mexico
+    - New York
+    - North Carolina
+    - North Dakota
+    - Ohio
+    - Oklahoma
+    - Oregon
+    - Pennsylvania
+    - Rhode Island
+    - South Carolina
+    - South Dakota
+    - Tennessee
+    - Texas
+    - Utah
+    - Vermont
+    - Virginia
+    - Washington
+    - West Virginia
+    - Wisconsin
+    - Wyoming
+  # Two-letter codes count as a foreign marker only after a comma, as in "Salem, OR".
+  us_state_codes: [AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY, DC]
+  other: [Sindh, Salt Lake City]
+
+# Search aliases for remote, and words that mark a remote post in a location field.
+remote_aliases: [remote, WFH, work from home, work-from-home]

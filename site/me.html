@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co; img-src 'self' data:; style-src 'self'">
+  <title>Your panel — Zero Se Shuru</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="js/config.js"></script>
+  <script type="module" src="js/me.js"></script>
+</head>
+<body>
+  <header class="masthead"><div class="wrap header-row"><p class="brand">Zero Se Shuru</p><nav aria-label="Main navigation"><a href="index.html">Browse public jobs</a></nav></div></header>
+  <main class="wrap">
+    <section class="intro"><p class="eyebrow">Your workspace</p><h1>Your job search</h1><p>Set your preferences and track your applications.</p></section>
+    <p id="data-errors" class="error" role="status"></p>
+    <p id="panel-status" class="feedback" role="status">Checking availability…</p>
+    <div id="panel"></div>
+  </main>
+</body>
+</html>
