@@ -1,4 +1,5 @@
--- Zero Se Shuru: Supabase schema, for a fresh project. Run once in the Supabase SQL editor.
+-- Zero Se Shuru: Supabase schema. Applied by tools/setup-supabase.ps1 (or paste it into the SQL editor).
+-- Safe to run again: every statement creates only what is missing or replaces itself.
 -- Row-level security is on for every table. The publishable (anon) key can only do what these
 -- policies allow; the secret key is never used by the app.
 -- Review fix (2026-11-20): admins are identified by user id, not by email, because sign-up does not
@@ -124,6 +125,13 @@ end $$;
 revoke all on function public.admin_stats() from public;
 grant execute on function public.admin_stats() to authenticated;
 
--- Last step, AFTER you have signed up on the site yourself: make that account the admin.
--- Check that the email is yours, then run (replace the email):
+-- Explicit grants, so access never depends on the platform's default privileges. RLS still decides rows.
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on public.profiles, public.saved_jobs to authenticated;
+grant select on public.hidden_posts, public.blocked_companies, public.tag_fixes, public.board_switches to anon, authenticated;
+grant insert, update, delete on public.hidden_posts, public.blocked_companies, public.tag_fixes, public.board_switches to authenticated;
+grant select on public.admin_audit to authenticated;
+
+-- Last step, AFTER you have signed up on the site yourself: make that account the admin
+-- (tools/setup-supabase.ps1 -MakeAdmin does this). By hand: check that the email is yours, then run:
 -- insert into public.admins (user_id) select id from auth.users where email = 'you@example.com' on conflict do nothing;
