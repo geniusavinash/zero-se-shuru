@@ -4,7 +4,20 @@ The brief asks for the AI tools and the prompts used. This file has three parts.
 
 ## 1. My prompts (Avinash): where I steered or corrected the AI
 
-_(Write 8–10 of your own prompts here, in your words, oldest first. Pick the ones where you changed the AI's direction. Examples from tonight: asking for a full review of v1 before building; insisting on user and admin panels after Claude Code advised against them; choosing to keep the work inside the project folder; moving the tagger to Azure gpt-6-luna.)_
+_(Avinash: these are my prompts to Claude Code, word for word in Hinglish, oldest first, with an English gloss. Check the selection and edit it if you like.)_
+
+| # | My prompt (verbatim) | In English | What it changed |
+|---|---|---|---|
+| 1 | "in dono ko achha se read karo samjho phir me bataunga kya krna h or tum batana tum kya samjhe" | Read both chat exports carefully and tell me what you understood before doing anything. | No code until the brief and the earlier plan were read back and agreed. |
+| 2 | "full code extract kr diya hu full code read krke batao jitna resorce diya hu sab read krke batao" | Read the whole extracted v1 code and every resource first. | A full review of v1 (13,600 lines, never run live), which led to the lean v2 rebuild. |
+| 3 | "requremnt, ssytem design artitacure task / sab tum new bna lo ... agar tumko lagta h scrach se kam krna h" | Write new requirements, architecture and tasks; start from scratch if that is better. | `docs/REQUIREMENTS.md`, `docs/ARCHITECTURE.md`, a task list; old material archived. |
+| 4 | "ye sab design kr liye hon ishka website admin panel user panel kuchh chhota nahi h na" | Isn't this too small without an admin panel and a user panel? | Reopened the scope question. |
+| 5 | "USER - OR ADMIN DONO PANEL BNA LENA / IN SAB MODAL KI API DUNGA SAB SET KRKE KAM KR LENA" | Build both panels; I'll give you every model's API, set them up and use them. | Login-based user and admin panels (overruled the lean plan); a multi-model team. |
+| 6 | "iSHKE SUNDER FOLDER BNA KR SAB RAKHNA H YEHI KAM KRNA H BAHAR NAHI" | Keep everything inside this folder; work here, not outside. | The repo lives in the project folder; packages are kept off OneDrive with junctions. |
+| 7 | "supabase kyu use krna h jab apne pass 8 core, 32gb ram, 400gb nvme ka vps h" | Why Supabase when I have my own 8-core, 32 GB VPS? | A written trade-off; Supabase kept for tonight, the VPS kept for later (`docs/DECISIONS.md`). |
+| 8 | "tum khud all work kr sakte ho ... tumko batao mere se kya chahiye" | Do all the work yourself; tell me only what you need from me. | Setup scripts for Supabase, Cloudflare and GitHub secrets; the asks shrank to account sign-ups. |
+| 9 | "GPT BALE API USE KR RAHE HO YA NAHI DEVELOPMENT USHI SE KRWANA H" | Are you using the GPT APIs? Development should be done with them. | More of the coding went to gpt-6.2-sol: the labelling tool, the workbook builder, fixes. |
+| 10 | "DEVELOPMENT CHAL RAHA H YA NHAI CHATGPT SE - ADMIN PANEL USER PANEL - OR DESIGN BHI ACHHA HONA CHAHIYE OR KAM KA SPEED BADHA DO" | Is GPT doing the development? The design must be good too, and speed things up. | A design pass from screenshots, a second independent review, and parallel workers. |
 
 ## 2. Tools
 
