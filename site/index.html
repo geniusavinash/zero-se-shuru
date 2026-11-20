@@ -18,47 +18,114 @@
 <body>
   <a class="skip" href="#main">Skip to jobs</a>
   <header class="masthead">
-    <div class="wrap header-row">
-      <div><p class="brand" id="brand">Zero Se Shuru</p><p id="tagline">Fresher jobs and internships in India.</p></div>
-      <nav id="panel-links" aria-label="Account" hidden><a href="me.html">Sign in</a></nav>
+    <div class="wrap header-row public-header">
+      <a class="brand" href="index.html"><span id="brand">Zero Se Shuru</span></a>
+      <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span class="sr-only">Menu</span>
+      </button>
+      <nav id="site-nav" aria-label="Main navigation">
+        <a href="#jobs">Jobs</a><a href="#how">How it works</a><a href="#contact">Contact</a>
+      </nav>
+      <nav id="panel-links" aria-label="Account" hidden><a class="account-pill" href="me.html">Sign in</a></nav>
     </div>
   </header>
-  <main id="main" class="wrap" tabindex="-1">
-    <section class="intro" aria-labelledby="headline">
-      <p class="eyebrow">India · Early careers</p>
-      <h1 id="headline">Find your first role.</h1>
-      <p>Browse fresher jobs, internships and apprenticeships. See why each post made the list.</p>
-      <div id="strip" class="strip public-strip" aria-label="Listing and refresh figures"></div>
-      <p id="stale" class="notice" hidden></p>
-      <p id="data-errors" class="error" role="status"></p>
+
+  <main id="main" class="wrap public-main" tabindex="-1">
+    <section class="hero" aria-labelledby="headline">
+      <div class="hero-copy">
+        <p class="hero-pill">Only for freshers in India</p>
+        <h1 id="headline">Find your first job.<br><span>Start from zero.</span></h1>
+        <p class="hero-lede">Internships, apprenticeships and fresher jobs, straight from companies' career pages and Adzuna. Checked every morning and evening.</p>
+        <form id="search" class="hero-search" aria-label="Search openings">
+          <div class="query-field">
+            <label class="sr-only" for="q">Search</label>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
+            <input id="q" name="q" type="search" placeholder="Job title, skill, company or city">
+          </div>
+          <label class="sr-only" for="city">City or metro</label>
+          <select id="city" name="city"><option value="">All cities</option></select>
+          <button type="submit" class="primary search-submit">Search jobs</button>
+        </form>
+        <div class="popular"><span id="popular-label">Popular:</span><div id="popular" class="popular-chips" role="group" aria-labelledby="popular-label"></div></div>
+        <p id="freshness" class="freshness muted">Checking last update…</p>
+        <p id="stale" class="notice" hidden></p>
+        <p id="data-errors" class="error" role="status"></p>
+      </div>
+      <aside class="just-added" aria-labelledby="just-title">
+        <h2 id="just-title">Just added</h2>
+        <ul id="just-list" class="just-list"></ul>
+      </aside>
     </section>
-    <section aria-labelledby="browse-title">
-      <h2 id="browse-title">Browse openings</h2>
+
+    <ul class="value-strip" aria-label="What to expect">
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-6 7v6c3 3 9 3 12 0v-6m4-2v7"/></svg><div><strong>Only fresher roles</strong><p>Internships, apprenticeships and jobs asking under 1 year.</p></div></li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M6 21V5l12-2v18M9 8h1m4 0h1M9 12h1m4 0h1m-4 8v-4h2v4"/></svg><div><strong>Straight from the source</strong><p>Companies' own career pages and the Adzuna API.</p></div></li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 16a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8 9h8m-8 4h5"/></svg><div><strong>Every card says why</strong><p>The line in the post that makes it fit.</p></div></li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4v5h-5M4 20v-5h5m-5 0a8 8 0 0 0 14 3M20 9A8 8 0 0 0 6 6"/></svg><div><strong>Fresh twice a day</strong><p>Refreshed at 6:07 am and 7:07 pm IST, on its own.</p></div></li>
+    </ul>
+
+    <section id="jobs" class="public-section" aria-labelledby="browse-title" tabindex="-1">
+      <h2 id="browse-title" class="section-title" tabindex="-1">Openings</h2>
+      <p id="result-count" class="muted" role="status">Loading jobs…</p>
+      <p id="save-status" class="feedback" role="status"></p>
       <form id="filters" class="surface filters" aria-label="Filter jobs">
-        <label class="wide">Search<input id="q" name="q" type="search" placeholder="Try data analyst or Bangalore"></label>
         <label>Role<select id="role" name="role"><option value="">All roles</option></select></label>
-        <label>City or metro<select id="city" name="city"><option value="">All cities</option></select></label>
         <label>Job type<select id="type" name="type"><option value="">All job types</option></select></label>
         <label>Source type<select id="source" name="source"><option value="">All sources</option><option value="company">Company site</option><option value="adzuna">Adzuna</option></select></label>
-        <div class="toolbar wide">
+        <div class="toolbar filter-actions">
           <label class="check"><input id="recent" name="recent" type="checkbox"> Posted within 7 days</label>
           <label class="check"><input id="remote" name="remote" type="checkbox"> Remote only</label>
           <button id="clear" type="button">Clear</button>
         </div>
       </form>
-      <p id="result-count" class="muted" role="status">Loading jobs…</p>
-      <p id="save-status" class="feedback" role="status"></p>
-      <div id="jobs" class="cards"></div>
+      <div id="jobs-list" class="cards"></div>
       <button id="more" class="more" type="button" hidden>Show more</button>
     </section>
+
+    <section id="how" class="public-section" aria-labelledby="how-title" tabindex="-1">
+      <h2 id="how-title" class="section-title">How it works</h2>
+      <div class="how-layout">
+        <ol class="steps">
+          <li>
+            <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 2h9v11H3zM3 7V4h13v5"/></svg></span>
+            <div><h3>1. We collect</h3><p id="how-collect">Openings from company career pages and the Adzuna API, every morning and evening.</p></div>
+          </li>
+          <li>
+            <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 22 5-3a7 7 0 0 0 3-6V6l-8-3-8 3v7a7 7 0 0 0 3 6zM8 12l3 3 5-6"/></svg></span>
+            <div><h3>2. We check</h3><p>Only posts in India that are open to freshers stay, and each card says why.</p></div>
+          </li>
+          <li>
+            <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM11 13 22 2"/></svg></span>
+            <div><h3>3. You apply</h3><p>On the company's own page.<span id="how-account" hidden> Sign in to save jobs and track where you applied.</span></p></div>
+          </li>
+        </ol>
+        <aside class="how-cta">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 16v-3m4 3v-5m4 5V8m4 8V4M4 10l5-4 3 1 5-4"/></svg>
+          <h3>Save jobs. Track every application.</h3>
+          <a id="account-cta" class="cta-button" href="#jobs">Browse openings</a>
+        </aside>
+      </div>
+    </section>
+
+    <dl id="numbers" class="numbers" aria-label="Listing figures">
+      <div class="number"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v13H3zM8 7V4h8v3M3 12h18m-11 0v2h4v-2"/></svg><dt>Openings</dt><dd data-figure="openings"><strong>—</strong></dd></div>
+      <div class="number"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V5h9v16m0-12h5v12M8 8h3m-3 4h3m-3 4h3"/></svg><dt>Companies hiring</dt><dd data-figure="companies"><strong>—</strong></dd></div>
+      <div class="number"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><dt>Cities</dt><dd data-figure="cities"><strong>—</strong></dd></div>
+      <div class="number"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9h16m-12 4h8m-8 3h5"/></svg><dt>Company career pages read</dt><dd data-figure="boards"><strong>—</strong></dd></div>
+    </dl>
   </main>
+
   <footer class="site-footer">
     <div class="wrap">
-      <h2>How we pick jobs</h2>
-      <p>Openings come from companies' own career pages and from Adzuna. We keep only posts in India that are open to freshers: internships, apprenticeships, roles asking for under 1 year of experience, or posts that invite freshers. The list refreshes every morning and evening, and every card says why it is here.</p>
-      <p><a class="adzuna" href="https://www.adzuna.in">Jobs by Adzuna</a></p>
-      <div id="removal-contact"></div>
-      <div class="footer-bottom"><small>Zero Se Shuru · 2026</small><a id="admin-link" href="admin.html" hidden>Admin</a></div>
+      <div class="footer-top">
+        <div><p class="brand">Zero Se Shuru</p><p class="footer-tagline">Start from zero.</p></div>
+        <nav class="footer-links" aria-label="Footer">
+          <a href="#how">How we pick jobs</a><a href="privacy.html">Privacy</a><a href="#contact">Request a removal</a>
+          <a class="github-link" href="https://github.com/geniusavinash/zero-se-shuru" aria-label="Source code on GitHub"><svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.64-1.25-1.64-1.02-.7.08-.69.08-.69 1.13.08 1.72 1.15 1.72 1.15 1 1.72 2.63 1.22 3.27.93.1-.73.39-1.22.71-1.5-2.5-.29-5.12-1.25-5.12-5.57 0-1.23.44-2.23 1.15-3.02-.12-.28-.5-1.43.11-2.98 0 0 .94-.3 3.09 1.15a10.76 10.76 0 0 1 5.62 0c2.15-1.45 3.09-1.15 3.09-1.15.61 1.55.23 2.7.11 2.98.71.79 1.15 1.79 1.15 3.02 0 4.33-2.63 5.28-5.14 5.56.4.35.76 1.03.76 2.08v3.11c0 .3.2.65.77.54A11.25 11.25 0 0 0 12 .75Z"/></svg></a>
+        </nav>
+      </div>
+      <div id="contact" tabindex="-1"></div>
+      <div class="footer-bottom"><small>© 2026 Zero Se Shuru</small><a class="adzuna" href="https://www.adzuna.in">Jobs by Adzuna</a><a id="admin-link" href="admin.html" hidden>Admin</a></div>
     </div>
   </footer>
 </body>

@@ -20,6 +20,7 @@ My prompts to Claude Code, word for word in Hinglish, oldest first, with an Engl
 | 10 | "DEVELOPMENT CHAL RAHA H YA NHAI CHATGPT SE - ADMIN PANEL USER PANEL - OR DESIGN BHI ACHHA HONA CHAHIYE OR KAM KA SPEED BADHA DO" | Is GPT doing the development? The design must be good too, and speed things up. | A design pass from screenshots, a second independent review, and parallel workers. |
 | 11 | "labeling ME NAHI SAMJHA / TUM APNA KAM 100% COMPLETE KRKE BATAO" | I didn't follow the labelling; finish the work yourself and report back. | Claude Code labelled the 50-post check, and every figure is marked "AI labels, not by hand" (`eval/labelling.json`). |
 | 12 | "ye mujhe as ye production project ki trah dikhana h / Accuracy and cost / Recent runs / ye sab yek alga admin ke under tab bna kr - hm apne detail me ye sab dikha denge" | I want this to look like a production project. Put Accuracy and cost, Recent runs and the rest in a separate admin tab; we will show them in our own write-up. | The public page became the product (jobs, last updated, a footer); the evidence moved to the admin panel's "Quality & runs" tab (gpt-6.2-sol, `tasks/production.md`). |
+| 13 | "dekho design hm kuchh yesha kr sabkte h ye sample banaya hu jo dekhne me bhi achha rahega / tum batao - fully responsive" (with a mockup image) | Look, we could do the design like this sample I made; it will look good. Tell me. Fully responsive. | A redesign in the mockup's style (gpt-6.2-sol, `tasks/redesign.md`), keeping only true content: real numbers instead of the mockup's sample figures, no salaries, logos, photo or support claims; a privacy page; checked from 360 px to 1440 px. |
 
 ## 2. Tools
 
@@ -36,6 +37,10 @@ Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it coul
 
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
+
+### Redesign from the owner's mockup (gpt-6.2-sol, with images), 2026-11-20 17:40 IST
+
+`tasks/redesign.md`, sent with the owner's mockup and screenshots of the current page on a laptop and a phone. Its first rule: the mockup is a style reference, not content, so every number is computed from the data and none of the mockup's sample claims (job counts, ratings, salaries, logos, "24/7 support", "Easy Apply") appear. It rebuilt the public page (hero search, popular searches from the data, "Just added", value strip, restyled cards with a monogram, "How it works" with an account card, a numbers strip, a dark footer), restyled the panels' header and footer, and added `privacy.html`, whose text was written by Claude Code from the actual schema and setup. 163 s, about $0.34. Claude Code reviewed the diff, made the popular-search chips compact, fixed the account button's text for a signed-in student, and checked 360, 390, 768, 1024, 1280 and 1440 px, dark mode, the menu, search, chips, saving and both panels in a real browser.
 
 ### Production pass (gpt-6.2-sol), 2026-11-20 17:00 IST
 

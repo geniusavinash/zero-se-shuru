@@ -96,20 +96,28 @@ export async function snapshot(report = () => {}) {
 
 const dateFormat = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' });
 const timeFormat = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+const refreshDate = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' });
+const refreshTime = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true });
+const inKolkata = value => /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00+05:30` : value;
 export function ist(value, withTime = false) {
   if (!value) return 'Unknown';
-  const date = new Date(/^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00+05:30` : value);
+  const date = new Date(inKolkata(value));
   if (!Number.isFinite(+date)) return 'Unknown';
   return withTime ? `${timeFormat.format(date)} IST` : dateFormat.format(date);
 }
 export function relative(value) {
-  const age = Date.now() - Date.parse(value);
+  const age = Date.now() - Date.parse(inKolkata(value));
   if (!Number.isFinite(age)) return '';
   if (age < 0) return 'clock ahead';
   if (age < 60000) return 'just now';
   if (age < 3600000) return `${Math.floor(age / 60000)} min ago`;
   if (age < 86400000) return `${Math.floor(age / 3600000)} h ago`;
   return `${Math.floor(age / 86400000)} d ago`;
+}
+export function freshness(value) {
+  if (!value || !Number.isFinite(Date.parse(value))) return 'Update time unavailable.';
+  const date = new Date(inKolkata(value));
+  return `Updated ${refreshDate.format(date)}, ${refreshTime.format(date)} IST · ${relative(value)}`;
 }
 export const isStale = meta => Date.now() - Date.parse(meta?.generatedAt) > (meta?.site?.staleAfterHours ?? 30) * 3600000;
 
@@ -142,28 +150,57 @@ export function searcher(query, tax) {
 export const adzuna = job => job.aggregator === true || job.source === 'adzuna';
 export const keysOf = job => [job.key, ...(job.memberKeys ?? [])];
 
+const iconPaths = {
+  clock: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM12 6v6l4 2',
+  briefcase: 'M3 7h18v13H3zM8 7V4h8v3M3 12h18m-11 0v2h4v-2',
+  pin: 'M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Zm-5.5 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z',
+  arrow: 'M4 12h15m-6-6 6 6-6 6'
+};
+function icon(name) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('class', 'icon');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute('d', iconPaths[name]);
+  svg.append(path);
+  return svg;
+}
+export function companyMark(job) {
+  const name = String(job.company ?? '').normalize('NFKC');
+  const letters = name.split(/\s+/u).flatMap(word => word.match(/\p{L}\p{M}*/u)?.[0] ?? []).slice(0, 2);
+  let hash = 0;
+  for (const char of String(job.companyKey ?? name)) hash = (Math.imul(hash, 31) + char.codePointAt(0)) >>> 0;
+  const mark = h('span', letters.join('').toLocaleUpperCase('en-IN') || '–', `company-mark mark-${hash % 6}`);
+  mark.setAttribute('aria-hidden', 'true');
+  return mark;
+}
+
 export function card(job, tax, save = null) {
-  const title = h('h3', job.title);
-  const badges = [job.isNew ? h('span', 'New', 'badge') : null,
-    job.overridden ? h('span', 'Tags corrected', 'badge quiet') : null];
+  const date = job.postedAt ?? job.firstSeen;
+  const age = relative(date) || relative(job.firstSeen);
+  const status = job.isNew ? h('span', 'New', 'badge') : h('span', [icon('clock'), age || 'Date unknown'], 'card-age');
   const locations = (job.cities ?? []).map(id => {
     const name = tax.cityName(id);
     const url = job.cityLinks?.find(item => item.city === id)?.url;
-    const chip = secureUrl(url) ? link(name, url, 'chip') : h('span', name, 'chip');
+    const contents = [icon('pin'), name];
+    const chip = secureUrl(url) ? link(contents, url, 'chip') : h('span', contents, 'chip');
     if (chip.tagName === 'A') chip.setAttribute('aria-label', `Apply for ${job.title} in ${name}`);
     return chip;
   });
-  if (job.remote) locations.push(h('span', 'Remote', 'chip'));
-  const apply = secureUrl(job.url) ? link('Apply', job.url, 'primary') : h('span', 'Apply link unavailable', 'muted');
+  if (job.remote) locations.push(h('span', [icon('pin'), 'Remote'], 'chip'));
+  const apply = secureUrl(job.url) ? link(['Apply', icon('arrow')], job.url, 'primary') : h('span', 'Apply link unavailable', 'muted');
   if (apply.tagName === 'A') apply.setAttribute('aria-label', `Apply for ${job.title} at ${job.company}`);
   return h('article', [
-    h('div', [title, ...badges], 'card-title'), h('p', job.company, 'company'),
-    locations.length ? h('div', locations, 'chips') : null,
+    h('div', [companyMark(job), h('div', [h('h3', job.title), h('p', job.company, 'company')], 'card-title'), status], 'card-head'),
+    h('div', [h('span', [icon('briefcase'), TYPES[job.jobType] ?? pretty(job.jobType)], 'type-meta'),
+      ...locations, h('span', tax.roleName(job.role), 'chip')], 'card-meta'),
     job.locationText ? h('p', job.locationText, 'muted') : null,
-    h('p', [h('span', tax.roleName(job.role)), ' ', h('span', TYPES[job.jobType] ?? pretty(job.jobType))], 'card-meta'),
+    job.overridden ? h('span', 'Tags corrected', 'badge quiet') : null,
     h('p', [h('strong', "Why it's here: "), job.why], 'why'),
     h('div', [
-      h('p', `${job.postedAt ? 'Posted' : 'First seen'} ${ist(job.postedAt ?? job.firstSeen)}`, 'muted'),
+      h('p', `${job.postedAt ? 'Posted' : 'First seen'} ${ist(date)}`, 'muted'),
       h('p', `Source: ${tax.sourceName(job.source)}`, 'muted')
     ], 'listing-meta'),
     h('div', [h('div', [apply, adzuna(job) ? link('Jobs by Adzuna', 'https://www.adzuna.in', 'adzuna') : null], 'apply-links'), save], 'card-actions')
@@ -263,16 +300,22 @@ export function strip(host, meta, shown) {
   }));
 }
 
-export function publicStrip(host, meta, jobs) {
-  const companies = jobs == null ? meta?.counts?.companies : new Set(jobs.map(job => job.companyKey)).size;
-  const age = relative(meta?.generatedAt);
-  const stats = [
-    ['Openings', count(jobs?.length)],
-    ['Companies hiring', count(companies)],
-    ['Updated', [ist(meta?.generatedAt, true), age ? h('small', age) : null]]
-  ];
-  host.replaceChildren(...stats.map(([title, value]) =>
-    h('div', [h('span', title, 'eyebrow'), h('strong', value)], 'stat')));
+export function pagesRead(meta) {
+  const sources = meta?.sources?.filter(source => source.name !== 'adzuna') ?? [];
+  if (!sources.length || sources.some(source => !Number.isSafeInteger(source.boardsOk) || source.boardsOk < 0)) return null;
+  return sources.reduce((sum, source) => sum + source.boardsOk, 0);
+}
+export function publicStrip(host, jobs, boards) {
+  const values = {
+    openings: jobs?.length,
+    companies: jobs == null ? null : new Set(jobs.map(job => job.companyKey).filter(Boolean)).size,
+    cities: jobs == null ? null : new Set(jobs.flatMap(job => job.cities ?? [])
+      .filter(id => id && id !== 'other_india' && id !== 'delhi_ncr')).size,
+    boards
+  };
+  for (const slot of host.querySelectorAll('[data-figure]')) {
+    slot.replaceChildren(h('strong', count(values[slot.dataset.figure])));
+  }
 }
 
 export function removalContact(meta) {

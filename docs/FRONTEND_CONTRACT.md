@@ -111,12 +111,12 @@ Sign-in is email and password, with no email confirmation.
 
 The public page is the product a student uses. The evidence (funnel, sources table, accuracy and cost, run history) lives in the admin panel's **Quality & runs** tab, and in the README and the sheet (owner's decision, 2026-11-20, `docs/DECISIONS.md`).
 
-1. **Top strip.** Three figures for job seekers, plain text (not links):
-   - openings: the post count;
-   - companies hiring: `counts.companies`;
-   - last refresh, IST, with the relative time ("3 h ago").
+The layout follows the owner's mockup (2026-11-20, `tasks/redesign.md`); every number on it is computed from the data, never a sample figure.
+
+1. **Hero.** "Only for freshers in India"; "Find your first job. / Start from zero."; a search bar (search box, city select, "Search jobs"); popular searches (the 3 roles and 2 cities with the most openings); "Updated <IST> · <relative>". From 1024 px, "Just added": the 3 most recently first-seen openings, linking to their apply URLs.
 
    A warning banner shows when `generatedAt` is older than `site.staleAfterHours`: "This list is older than expected. Confirm the opening on the company's page before applying."
+   Below the hero: a value strip (only fresher roles; straight from the source; every card says why; fresh twice a day), and lower down "How it works" (we collect, we check, you apply, with an account card) and a numbers strip (openings, companies hiring, cities, company career pages read).
 2. **Search.** A box that matches the start of words in the title, company, location text, role name, city names and city aliases.
 3. **Filters.**
    - Role (with counts).
@@ -144,12 +144,9 @@ The public page is the product a student uses. The evidence (funnel, sources tab
    - apply tag fixes (role and cities).
 
    Fail silently to the plain list.
-6. **Footer** (`<footer>`, replaces the old "How it works" section):
-   - "How we pick jobs": two or three plain sentences: openings come from companies' own career pages and from Adzuna; only posts in India that are open to freshers are kept (internships, apprenticeships, under 1 year of experience, or freshers invited); the list refreshes every morning and evening; every card says why it is there;
-   - the "Jobs by Adzuna" attribution, linking to https://www.adzuna.in;
-   - the removal contact: `site.contact` if set, else "Open an issue" on `site.repoUrl`;
-   - when `site.panels`: a small "Admin" link (→ admin.html).
-7. **Header.** The name, the tagline, and, when `site.panels`, a "Sign in" link (→ me.html).
+6. **Footer** (dark green, on every page): the name and "Start from zero."; links "How we pick jobs", "Privacy" (`privacy.html`), "Request a removal" and GitHub; the removal contact (`site.contact` if set, else "Open an issue" on `site.repoUrl`); the "Jobs by Adzuna" attribution; when `site.panels`, a small "Admin" link.
+7. **Header** (sticky, on every page): the name, nav links (Jobs, How it works, Contact), and, when `site.panels`, a "Sign in" button (→ me.html). At 768 px and below the nav sits behind a "Menu" button.
+8. **Privacy page** (`privacy.html`): what is stored for an account, who can see it, where it is stored, what is not done, deletion, and the listings contact. Its text matches `db/schema.sql` and the setup.
 
 ## User panel (me.html)
 
