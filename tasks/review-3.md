@@ -1,7 +1,7 @@
 You are an independent senior reviewer (engineering, product and hiring) of a take-home submission for a "Gen AI & Engineering" role at a startup. It is due tonight. Be the person who catches what everyone else missed. Do not rewrite code; point to it.
 
 Attached:
-1. `brief-and-video.md`: the founder's email with the task (verbatim, personal details removed), a summary of his hiring reel, and the submission status right now.
+1. `brief-and-video.md`: the founder's email with the task (verbatim, personal details removed), a summary of the founder's hiring reel, and the submission status right now.
 2. The repo's README, docs, evaluation files, metrics, prompt, configs, workflow, schema, pipeline code and site code, and the outline of the candidate's video (`LOOM_SCRIPT.md`).
 3. Nine screenshots of the live site, in order: (1) landing, laptop; (2) the openings list; (3) "How it works" and the numbers strip; (4) landing on a phone; (5) the user panel, Profile tab; (6) the user panel, Saved tab; (7) the admin dashboard; (8) the admin "Quality & runs" tab at "Accuracy and cost"; (9) the admin review queue.
 
@@ -17,10 +17,10 @@ Review the landing page, the user panel and the admin panel, and the pipeline be
 
 ## Part C: through the founder's eyes
 
-From the email and the reel (he wants owners who think "I can do this better", work they are proud to say "I built this", speed, AI used for almost everything but the thinking their own; the next step is a 30-minute call where he asks for live changes):
-- what will impress him;
-- what will worry him;
-- the 5 changes he is most likely to ask for live, and for each, where in the code it would be made and roughly how long it takes.
+From the email and the reel (the founder wants owners who think "I can do this better", work they are proud to say "I built this", speed, AI used for almost everything but the thinking their own; the next step is a 30-minute call with live change requests):
+- what will impress the founder;
+- what will worry the founder;
+- the 5 changes the founder is most likely to ask for live, and for each, where in the code it would be made and roughly how long it takes.
 
 ## Part D: verdict
 
