@@ -11,7 +11,8 @@ $ErrorActionPreference = 'Stop'
 
 $api = 'https://api.supabase.com/v1'
 $projectName = 'zero-se-shuru'
-$siteUrl = 'https://zero-se-shuru.pages.dev'
+# The page's address comes from config/site.yaml, so sign-in redirects follow it if it changes.
+$siteUrl = (Select-String -Path (Join-Path $PSScriptRoot '..\config\site.yaml') -Pattern '^public_url:\s*(\S+)').Matches[0].Groups[1].Value.TrimEnd('/')
 $token = [Environment]::GetEnvironmentVariable('SUPABASE_ACCESS_TOKEN', 'User')
 if (-not $token) { throw 'SUPABASE_ACCESS_TOKEN is not set. Run tools\set-keys.ps1 first.' }
 $headers = @{ Authorization = "Bearer $token" }
