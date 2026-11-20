@@ -22,6 +22,10 @@ Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it coul
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
 
+### Labelling tool worker (gpt-6.2-sol), 2026-11-20 15:05 IST
+
+The full prompt is `tasks/labeler.md`: a local-only form for the 50-post hand-check (`src/eval/label-server.ts`, `eval/labeler/`). It asked for a server bound to 127.0.0.1 with Host and Origin checks, atomic writes of the same CSV format, and no access to predictions, so the check stays blind. 62 s, about $0.13. Claude Code then type-checked it, read every line, and tested it against a throwaway CSV (valid save, bad role, bad Origin, bad Host, a request for the predictions file).
+
 ### Front-end worker (gpt-6.2-sol), 2026-11-20 13:45 IST
 
 Written for Codex CLI, then sent through `gpt-worker.ts` with the contract and docs attached (`tasks/frontend.md`).

@@ -12,6 +12,7 @@
     "refresh": "tsx src/run.ts",
     "serve": "tsx src/serve.ts",
     "eval:sample": "tsx src/eval/sample.ts",
+    "eval:label": "tsx src/eval/label-server.ts",
     "eval:labels": "tsx src/eval/labels.ts",
     "eval:score": "tsx src/eval/score.ts",
     "cost": "tsx src/cost.ts",

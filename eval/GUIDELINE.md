@@ -11,6 +11,7 @@ Written before any label was made. Committed to git before labelling, so the rul
    - `label_cities`
    - `label_fresher_india` (yes, no or unsure)
    - `label_note` (optional)
+   The same sheet can be filled in a form: `npm run eval:label`, then open http://127.0.0.1:8081. It shows the post's title, company, location and link, the role and city lists, and these rules; it never shows a prediction. It writes the same CSV.
 4. When all 50 are done, run `npm run eval:labels`. It writes `eval/labels_50.csv` (keys and labels only). Commit that file before scoring; `npm run eval:score` refuses to run otherwise.
 
 ## Role: exactly one id

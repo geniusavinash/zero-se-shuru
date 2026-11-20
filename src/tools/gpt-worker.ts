@@ -32,7 +32,12 @@ const cfg = loadConfig();
 const model = arg('model');
 const effort = arg('effort', 'medium') as 'low' | 'medium' | 'high';
 const mode = arg('mode', 'text');
-const allow = normalize(arg('allow', 'site/'));
+// One or more path prefixes, comma-separated (e.g. "src/eval/,eval/labeler/").
+const allow = arg('allow', 'site/')
+  .split(',')
+  .map((a) => a.trim())
+  .filter((a) => a !== '')
+  .map((a) => normalize(a));
 const task = readFileSync(arg('task'), 'utf8');
 const context = arg('context', '')
   .split(',')
@@ -88,8 +93,8 @@ if (mode !== 'files') {
   const parsed = JSON.parse(text) as { files: { path: string; content: string }[]; notes: string };
   for (const f of parsed.files) {
     const path = normalize(f.path.replace(/^\.?[\\/]/, ''));
-    if (!path.startsWith(allow) || path.includes('..') || /[\\/](data|samples)[\\/]/.test(path)) {
-      console.log(`REFUSED (outside ${allow} or protected): ${f.path}`);
+    if (!allow.some((a) => path.startsWith(a)) || path.includes('..') || /[\\/](data|samples)[\\/]/.test(path)) {
+      console.log(`REFUSED (outside ${allow.join(', ')} or protected): ${f.path}`);
       continue;
     }
     mkdirSync(dirname(path), { recursive: true });

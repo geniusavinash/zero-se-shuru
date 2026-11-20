@@ -6,4 +6,5 @@ node_modules/
 site/data/
 site/js/config.js
 eval/private_labels.csv
+eval/*.tmp
 *.log

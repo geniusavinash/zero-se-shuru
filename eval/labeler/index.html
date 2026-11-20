@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hand-check labelling</title>
+  <link rel="stylesheet" href="/labeler.css">
+  <script type="module" src="/labeler.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Hand-check labelling</h1>
+    <p id="progress" aria-live="polite">Loading the label sheet…</p>
+    <p id="spare-hint" hidden></p>
+    <p id="complete" class="banner" hidden>All 50 done. Next: run <code>npm run eval:labels</code> in the terminal.</p>
+  </header>
+  <div class="layout" id="workspace" hidden>
+    <nav aria-label="Posts">
+      <h2>Main sample</h2>
+      <ol id="main-list" class="post-list" aria-label="Main sample"></ol>
+      <details id="spares">
+        <summary>Spares (only to replace a dead link)</summary>
+        <ol id="spare-list" class="post-list" aria-label="Spare posts"></ol>
+      </details>
+    </nav>
+    <main>
+      <section id="editor" aria-labelledby="post-title" hidden>
+        <p id="post-number" class="muted"></p>
+        <h2 id="post-title" tabindex="-1"></h2>
+        <dl class="metadata">
+          <div><dt>Company</dt><dd id="company"></dd></div>
+          <div><dt>Location</dt><dd id="location"></dd></div>
+          <div><dt>Source</dt><dd id="source"></dd></div>
+        </dl>
+        <a id="original" class="post-link" target="_blank" rel="noopener noreferrer" hidden>Open the original post</a>
+        <p id="not-https" hidden>Open the original post (link is not https)</p>
+        <form id="form">
+          <fieldset id="controls" class="controls">
+            <legend class="sr-only">Post labels</legend>
+            <label class="field" for="role">Role</label>
+            <select id="role" name="label_role"><option value="">Choose a role</option></select>
+            <fieldset>
+              <legend>Cities</legend>
+              <p id="city-hint" class="hint">NCR with no city named: Delhi NCR. An Indian town not on the list: Other India.</p>
+              <label class="field" for="city-filter">Filter cities</label>
+              <input id="city-filter" type="search" autocomplete="off" aria-describedby="city-hint">
+              <ul id="chips" class="chips" aria-label="Selected cities" hidden></ul>
+              <div id="city-options" class="city-options"></div>
+              <button id="clear-cities" type="button">No city (remote, pan-India or none given)</button>
+            </fieldset>
+            <fieldset aria-describedby="fresher-hint">
+              <legend>Fresher and in India</legend>
+              <p id="fresher-hint" class="hint">Yes only if: in India (or remote in India), open to freshers (internship, under 1 year, or freshers/students/batch invited), and one real opening.</p>
+              <div class="actions">
+                <label class="choice"><input type="radio" name="fresher" value="yes"> Yes</label>
+                <label class="choice"><input type="radio" name="fresher" value="no"> No</label>
+                <label class="choice"><input type="radio" name="fresher" value="unsure"> Unsure</label>
+              </div>
+            </fieldset>
+            <label class="field" for="note">Note</label>
+            <input id="note" type="text" maxlength="300">
+            <div class="actions form-actions">
+              <button class="primary" type="submit" aria-keyshortcuts="Control+Enter">Save and next</button>
+              <button id="save" type="button">Save</button>
+              <button id="dead" type="button">Mark dead link</button>
+              <button id="previous" type="button">Previous</button>
+              <button id="next" type="button">Next</button>
+            </div>
+          </fieldset>
+        </form>
+        <p id="status" role="status"></p>
+      </section>
+      <details class="rules">
+        <summary>Labelling rules</summary>
+        <pre id="guideline"></pre>
+      </details>
+    </main>
+  </div>
+</body>
+</html>
