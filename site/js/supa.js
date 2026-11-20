@@ -31,3 +31,4 @@ export async function getSession() {
 export const signIn = (email, password) => authCall('signInWithPassword', { email, password });
 export const signUp = (email, password) => authCall('signUp', { email, password });
 export const signOut = () => authCall('signOut');
+export const updatePassword = password => authCall('updateUser', { password });

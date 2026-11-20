@@ -51,6 +51,44 @@ function profileEditor(client, user, profile, tax, hasMeta, onSave) {
   return form;
 }
 
+function passwordEditor(auth) {
+  const password = input('password');
+  const repeat = input('password');
+  for (const field of [password, repeat]) {
+    field.autocomplete = 'new-password';
+    field.minLength = 8;
+    field.required = true;
+  }
+  const submit = button('Change password', 'submit', 'primary');
+  const feedback = actionStatus();
+  const form = h('form', [label('New password', password), label('Repeat new password', repeat),
+    h('div', submit), feedback], 'surface stack');
+  form.noValidate = true;
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (submit.disabled) return;
+    if (password.value.length < 8) {
+      report(feedback, 'Enter a new password with at least 8 characters.', true);
+      return;
+    }
+    if (password.value !== repeat.value) {
+      report(feedback, 'The passwords do not match.', true);
+      return;
+    }
+    submit.disabled = true;
+    report(feedback, 'Changing password…');
+    try {
+      await auth.updatePassword(password.value);
+      password.value = '';
+      repeat.value = '';
+      report(feedback, 'Password changed.');
+    } catch (error) {
+      report(feedback, error?.message || 'Could not change the password. Please try again.', true);
+    } finally { submit.disabled = false; }
+  });
+  return form;
+}
+
 function savedEditor(client, user, row, job, tax, jobsAvailable) {
   const select = options(h('select'), STATUSES.map(id => [id, pretty(id)]), row.status);
   const note = h('textarea');
@@ -121,6 +159,7 @@ async function start() {
     };
     if (profileLoad.status === 'fulfilled') profileView.append(profileEditor(client, user, profile, tax, !!meta, updateMatches));
     else profileView.append(h('p', 'Could not load your profile. Reload to try again.', 'error'));
+    profileView.append(passwordEditor(auth));
     updateMatches();
     if (savedLoad.status !== 'fulfilled') saved.append(h('p', 'Could not load saved jobs. Reload to try again.', 'error'));
     else if (!savedLoad.value.length) saved.append(h('p', 'No saved jobs yet. Use the save button on the public list.'));
