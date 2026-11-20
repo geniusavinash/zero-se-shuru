@@ -1,0 +1,401 @@
+{
+ "greenhouse:stripe:8031833": {
+  "role": "software_development",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "greenhouse"
+ },
+ "adzuna:133c2130a1890537": {
+  "role": "finance_accounting",
+  "cities": [
+   "bhopal"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:961d51cceabb4739": {
+  "role": "other",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "greenhouse:freshprints:6126731004": {
+  "role": "hr_recruitment",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "greenhouse"
+ },
+ "adzuna:1f8fe40c0950f220": {
+  "role": "data_analytics_ai",
+  "cities": [
+   "navi_mumbai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:7ef0e12328355dfa": {
+  "role": "software_development",
+  "cities": [
+   "mumbai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:d6282535a74e0507": {
+  "role": "hr_recruitment",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:1f37cdff32f81427": {
+  "role": "customer_support",
+  "cities": [
+   "coimbatore"
+  ],
+  "source": "adzuna"
+ },
+ "lever:rws:0df914c7-2848-4a05-be1d-96f52909886d": {
+  "role": "data_analytics_ai",
+  "cities": [
+   "delhi"
+  ],
+  "source": "lever"
+ },
+ "adzuna:a6de24a3db0af831": {
+  "role": "software_development",
+  "cities": [
+   "jaipur"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:5401693bbfe8835c": {
+  "role": "software_development",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:6c8d89dbe4f1aa49": {
+  "role": "other",
+  "cities": [
+   "ghaziabad",
+   "noida"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:0361836f01168557": {
+  "role": "software_development",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:36c2b14243512c8e": {
+  "role": "customer_support",
+  "cities": [
+   "mumbai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:67798aaf566842af": {
+  "role": "data_analytics_ai",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:83317e5049f1ed20": {
+  "role": "legal_compliance",
+  "cities": [
+   "navi_mumbai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:ee817427b26561a9": {
+  "role": "customer_support",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "greenhouse:fictiv:8899789002": {
+  "role": "operations_admin",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "greenhouse"
+ },
+ "greenhouse:openfx:5484283008": {
+  "role": "legal_compliance",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "greenhouse"
+ },
+ "adzuna:c8dd42a25b274e26": {
+  "role": "marketing",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:fb18f1db7b488c26": {
+  "role": "data_analytics_ai",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "greenhouse:instawork:4718950006": {
+  "role": "sales_bd",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "greenhouse"
+ },
+ "adzuna:85f20068755d9a9b": {
+  "role": "content_writing",
+  "cities": [
+   "delhi"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:a2d625361ae266c9": {
+  "role": "sales_bd",
+  "cities": [
+   "other_india"
+  ],
+  "source": "adzuna"
+ },
+ "greenhouse:rubrik:8282005": {
+  "role": "software_development",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "greenhouse"
+ },
+ "adzuna:acc0964d67f9d5fe": {
+  "role": "other",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:4ecb587a8b4614c2": {
+  "role": "other",
+  "cities": [
+   "other_india"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:85df37c3452f2732": {
+  "role": "customer_support",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:047bd3592e4cdc7b": {
+  "role": "education_research",
+  "cities": [
+   "other_india"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:7e566e3badafa94e": {
+  "role": "product_project",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:2163986bc223468b": {
+  "role": "sales_bd",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:7a65f58aa27bddc4": {
+  "role": "data_analytics_ai",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:4ab55bef2e646a0a": {
+  "role": "other",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:f11e194d7be7fc32": {
+  "role": "other",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:4114afb159d23df7": {
+  "role": "finance_accounting",
+  "cities": [
+   "coimbatore"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:1b214170bfa062b9": {
+  "role": "other",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "adzuna"
+ },
+ "lever:merklescience:20675d00-156c-4f3f-a9bf-4cacee176bc2": {
+  "role": "software_development",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "lever"
+ },
+ "adzuna:afb84dff8aa2072b": {
+  "role": "marketing",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:bd9d839d1a705609": {
+  "role": "operations_admin",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:fc47eacbb028ab20": {
+  "role": "other",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:c08002e058e1420f": {
+  "role": "sales_bd",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:e63b062c839a2d74": {
+  "role": "marketing",
+  "cities": [
+   "goa",
+   "other_india"
+  ],
+  "source": "adzuna"
+ },
+ "lever:paytm:426a6834-1397-4e65-94af-69874c790805": {
+  "role": "hr_recruitment",
+  "cities": [
+   "gurugram",
+   "noida"
+  ],
+  "source": "lever"
+ },
+ "adzuna:5ff380f39eb953e1": {
+  "role": "marketing",
+  "cities": [
+   "indore"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:ea5b8f8ce34a0a21": {
+  "role": "sales_bd",
+  "cities": [
+   "ahmedabad"
+  ],
+  "source": "adzuna"
+ },
+ "greenhouse:instawork:4706444006": {
+  "role": "non_software_engineering",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "greenhouse"
+ },
+ "adzuna:ed3a931ae3e9e648": {
+  "role": "sales_bd",
+  "cities": [
+   "chennai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:297341bbea843d70": {
+  "role": "other",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:ce0d7b3e6977c943": {
+  "role": "customer_support",
+  "cities": [
+   "mumbai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:ece0c71dced40648": {
+  "role": "marketing",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:3ee37496d04357ce": {
+  "role": "finance_accounting",
+  "cities": [
+   "mumbai"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:0c847ef185eff524": {
+  "role": "finance_accounting",
+  "cities": [
+   "other_india"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:f5b5233f32f76479": {
+  "role": "hr_recruitment",
+  "cities": [
+   "chennai"
+  ],
+  "source": "adzuna"
+ },
+ "lever:paytmpayments:bd9efaed-46c6-49ff-a2ba-7ffc174b4a1a": {
+  "role": "hr_recruitment",
+  "cities": [
+   "noida"
+  ],
+  "source": "lever"
+ },
+ "adzuna:2d706c17ebd262e0": {
+  "role": "design_creative",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:3ef446185de993fd": {
+  "role": "other",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:ecf93e5f8b85eae7": {
+  "role": "finance_accounting",
+  "cities": [
+   "hyderabad"
+  ],
+  "source": "adzuna"
+ },
+ "adzuna:53d717a2777a214b": {
+  "role": "data_analytics_ai",
+  "cities": [],
+  "source": "adzuna"
+ },
+ "adzuna:ee2aff7b32193a79": {
+  "role": "sales_bd",
+  "cities": [
+   "bengaluru"
+  ],
+  "source": "adzuna"
+ },
+ "greenhouse:landor:8349420": {
+  "role": "marketing",
+  "cities": [
+   "mumbai"
+  ],
+  "source": "greenhouse"
+ }
+}
