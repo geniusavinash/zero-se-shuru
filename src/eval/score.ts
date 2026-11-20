@@ -9,15 +9,21 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { loadConfig } from '../config.ts';
 import { cityIds, LABELS, PREDICTIONS, readCsv, SAMPLE, wilson } from './common.ts';
 
+/** Who made the labels and from what text; shown with every figure, so an AI check is never passed off as a hand check. */
+const LABELLING = 'eval/labelling.json';
+type Labelling = { labeller: string; byHand: boolean; ownerReviewed: number; textUsed: string; blind: string; limits: string[] };
+
 const cfg = loadConfig();
 const git = (...args: string[]): string => execFileSync('git', args, { encoding: 'utf8' }).trim();
 if (!process.argv.includes('--no-git-check')) {
   if (git('log', '--oneline', '--', LABELS) === '') throw new Error(`${LABELS} is not committed yet. Commit it first: that commit is the proof the labels came before the score.`);
   if (git('status', '--porcelain', '--', LABELS) !== '') throw new Error(`${LABELS} has changes that are not committed.`);
+  if (existsSync(LABELLING) && git('status', '--porcelain', '--', LABELLING) !== '') throw new Error(`${LABELLING} has changes that are not committed.`);
 }
 const sample = JSON.parse(readFileSync(SAMPLE, 'utf8')) as { runId: string; shown: number; model: string; promptVersion: string };
 const pred = JSON.parse(readFileSync(PREDICTIONS, 'utf8')) as Record<string, { role: string; cities: string[]; source: string }>;
 const labels = readCsv(LABELS);
+const labelling = existsSync(LABELLING) ? (JSON.parse(readFileSync(LABELLING, 'utf8')) as Labelling) : null;
 
 const C = (correct: number, total: number) => ({ correct, total, ...wilson(correct, total) });
 let role = 0;
@@ -58,6 +64,7 @@ const metrics = {
   model: sample.model,
   promptVersion: sample.promptVersion,
   labelledAt: new Date().toISOString(),
+  labelling,
   accuracy: { both: C(both, n), role: C(role, n), city: C(city, n) },
   fresherShareBySource: Object.fromEntries(Object.entries(fresherBy).map(([s, v]) => [s, C(v.yes, v.total)])),
   llmCallsInRun: runCalls.length,
@@ -71,10 +78,23 @@ writeFileSync('data/metrics.json', `${JSON.stringify(metrics, null, 1)}\n`);
 const pct = (x: { correct: number; total: number; low: number; high: number }): string =>
   `${x.correct}/${x.total} = ${Math.round((x.correct / x.total) * 100)}% (95% CI ${Math.round(x.low * 100)}–${Math.round(x.high * 100)}%)`;
 const report = [
-  `# Hand-check of 50 posts: run ${sample.runId}`,
+  `# ${labelling && !labelling.byHand ? '50-post check (AI labels, not a hand check)' : 'Hand-check of 50 posts'}: run ${sample.runId}`,
   '',
-  `Model ${sample.model}, prompt ${sample.promptVersion}. Labels from the original posts, committed before scoring (see the git log of ${LABELS}).`,
+  `Model ${sample.model}, prompt ${sample.promptVersion}. Labels committed before scoring (see the git log of ${LABELS}).`,
   '',
+  ...(labelling
+    ? [
+        `**Who labelled:** ${labelling.labeller}${labelling.byHand ? '' : ', not by hand'}${labelling.ownerReviewed > 0 ? `; the owner reviewed ${labelling.ownerReviewed} of the 50 against the original posts` : ''}.`,
+        '',
+        `**Text used:** ${labelling.textUsed}`,
+        '',
+        `**Blind:** ${labelling.blind}`,
+        '',
+        '**Limits:**',
+        ...labelling.limits.map((l) => `- ${l}`),
+        '',
+      ]
+    : []),
   '| Measure | Result |',
   '|---|---|',
   `| Role and city both right | ${pct(metrics.accuracy.both)} |`,

@@ -1,0 +1,14 @@
+{
+ "labeller": "Claude Opus 5.5 (claude-opus-5-5), an AI model",
+ "byHand": false,
+ "ownerReviewed": 0,
+ "labelledOn": "2026-11-20",
+ "why": "The owner asked Claude Code to finish the 50-post check itself.",
+ "textUsed": "Company-board posts (10): the full post text from the board's public API, the same text as the public post. Adzuna posts (40): the API snippet (up to 500 characters) with the title, company and location. adzuna.in refuses automated requests, so the full Adzuna pages were not read.",
+ "blind": "Labelled from a pack built from the raw collected posts, with no tags or predictions in it. eval/pred_50.json was not opened before this file and eval/labels_50.csv were committed.",
+ "limits": [
+  "Not a hand check: an AI model made every label.",
+  "The same AI session wrote the tagging prompt and the guideline, so the labels are not independent of the design.",
+  "For the 40 Adzuna posts the labeller saw only the snippet the tagger saw, so facts that appear only in the full post are not checked."
+ ]
+}

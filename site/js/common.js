@@ -288,9 +288,13 @@ export function evidence(host, meta, tax, admin = false) {
       secureUrl(row.terms) ? link('Terms', row.terms) : '—', row.whyAllowed, row.attribution,
       row.on ? 'On' : 'Off', ...(admin ? [count(row.boardsOk), count(row.boardsFailed)] : [])]))]));
   const metrics = meta?.metrics;
+  // Who made the labels is shown beside the figures, so an AI check never reads as a hand check.
+  const labelling = metrics?.labelling;
+  const aiLabels = labelling?.byHand === false;
   const metricContent = metrics ? [
     h('p', `As of run ${metrics.asOfRun} · Model: ${metrics.model} · Prompt: ${metrics.promptVersion}`),
-    table('Hand-check results (95% intervals)', ['Measure', 'Result'], [
+    ...(labelling ? [h('p', `Labels: ${labelling.labeller}${aiLabels ? ', not by hand' : ''}${labelling.ownerReviewed > 0 ? `; the owner reviewed ${labelling.ownerReviewed} of the 50` : ''}. ${(labelling.limits ?? []).slice(1).join(' ')}`)] : []),
+    table(aiLabels ? '50-post check with AI labels (95% intervals)' : 'Hand-check results (95% intervals)', ['Measure', 'Result'], [
       ['Role and city both right', interval(metrics.accuracy?.both)], ['Role', interval(metrics.accuracy?.role)],
       ['City', interval(metrics.accuracy?.city)], ...Object.entries(metrics.fresherShareBySource ?? {})
         .map(([id, value]) => [`Fresher and in India: ${tax.sourceName(id)}`, interval(value)])
