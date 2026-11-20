@@ -41,14 +41,15 @@ export function adzunaLink(v: unknown): string | undefined {
   if (!s) return undefined;
   try {
     const u = new URL(s);
-    if (u.protocol === 'http:' && /(^|\.)adzuna\.[a-z.]+$/i.test(u.hostname)) u.protocol = 'https:';
+    if (u.username || u.password || !/(^|\.)adzuna\.(in|com|co\.uk)$/i.test(u.hostname)) return undefined;
+    if (u.protocol === 'http:') u.protocol = 'https:';
     return u.protocol === 'https:' ? u.toString() : undefined;
   } catch {
     return undefined;
   }
 }
 
-export function parseAdzunaPage(data: unknown): { jobs: Job[]; skipped: number; count?: number } | undefined {
+export function parseAdzunaPage(data: unknown): { jobs: Job[]; skipped: number; raw: number; count?: number } | undefined {
   if (!isRecord(data) || !Array.isArray(data.results)) return undefined;
   const jobs: Job[] = [];
   let skipped = 0;
@@ -83,7 +84,7 @@ export function parseAdzunaPage(data: unknown): { jobs: Job[]; skipped: number; 
       aggregator: true,
     });
   }
-  return { jobs, skipped, count: typeof data.count === 'number' ? data.count : undefined };
+  return { jobs, skipped, raw: data.results.length, count: typeof data.count === 'number' ? data.count : undefined };
 }
 
 export async function readAdzuna(
@@ -115,7 +116,7 @@ export async function readAdzuna(
       if (page === 1) counts[q.name] = parsed.count;
       skipped += parsed.skipped;
       for (const j of parsed.jobs) if (!byKey.has(j.key)) byKey.set(j.key, j);
-      if (parsed.jobs.length < 50) break;
+      if (parsed.raw < 50) break;
     }
   }
   return { ok: byKey.size > 0, reason: failures > 0 ? `${failures} query pages failed` : undefined, jobs: [...byKey.values()], skipped, calls, counts };

@@ -22,6 +22,14 @@ Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it coul
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
 
+### Design pass (gpt-6.2-sol, with screenshots), 2026-11-20 16:00 IST
+
+`tasks/design.md`, sent with screenshots of the page on a laptop and a phone, so the model could see the design it was changing. It restyled the page and both panels (`style.css`, two intro lines, one card wrapper); 79 s, about $0.18. Checked with new screenshots and a diff of every JS change.
+
+### Second review (gpt-6.2-astra) and fixes (gpt-6.2-sol), 2026-11-20 16:05 IST
+
+`tasks/review-2.md` asked for an independent review of everything written after the first review (18 findings, about $0.64). `tasks/fixes-sol.md` gave three of the fixes to gpt-6.2-sol (29 s, about $0.08); Claude Code made the rest and reran the tests and the 14 live security checks.
+
 ### Labelling tool worker (gpt-6.2-sol), 2026-11-20 15:05 IST
 
 The full prompt is `tasks/labeler.md`: a local-only form for the 50-post hand-check (`src/eval/label-server.ts`, `eval/labeler/`). It asked for a server bound to 127.0.0.1 with Host and Origin checks, atomic writes of the same CSV format, and no access to predictions, so the check stays blind. 62 s, about $0.13. Claude Code then type-checked it, read every line, and tested it against a throwaway CSV (valid save, bad role, bad Origin, bad Host, a request for the predictions file).

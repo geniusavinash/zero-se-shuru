@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { isPublicSupabaseKey } from '../src/build.ts';
 import { loadConfig, parseBoards } from '../src/config.ts';
 
 describe('config', () => {
@@ -18,5 +19,17 @@ describe('config', () => {
 
   it('rejects a boards file with a bad "on" value instead of guessing', () => {
     expect(() => parseBoards('ats,token,company,on\ngreenhouse,x,,maybe\n')).toThrow(/yes or no/);
+  });
+});
+
+describe('public Supabase key guard (config.js is shipped to every visitor)', () => {
+  const jwt = (payload: object): string =>
+    ['eyJhbGciOiJIUzI1NiJ9', Buffer.from(JSON.stringify(payload)).toString('base64url'), 'sig'].join('.');
+  it('accepts only a publishable key or an anon JWT', () => {
+    expect(isPublicSupabaseKey('sb_publishable_abc123_XYZ')).toBe(true);
+    expect(isPublicSupabaseKey(jwt({ role: 'anon', ref: 'x' }))).toBe(true);
+    expect(isPublicSupabaseKey('sb_secret_abc123')).toBe(false);
+    expect(isPublicSupabaseKey(jwt({ role: 'service_role' }))).toBe(false);
+    expect(isPublicSupabaseKey('sb_publishable_a sb_secret_b')).toBe(false);
   });
 });

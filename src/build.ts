@@ -83,6 +83,22 @@ export interface BuildInput {
   sourcesOn: SourceName[];
 }
 
+/**
+ * True only for a key that is safe to ship to browsers: a new `sb_publishable_` key, or a legacy JWT whose
+ * role claim is `anon`. A secret key (`sb_secret_`) or a `service_role` JWT is never public.
+ */
+export function isPublicSupabaseKey(key: string): boolean {
+  if (/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) return true;
+  const parts = key.split('.');
+  if (parts.length !== 3 || !key.startsWith('eyJ')) return false;
+  try {
+    const payload = JSON.parse(Buffer.from(parts[1] ?? '', 'base64url').toString('utf8')) as { role?: unknown };
+    return payload.role === 'anon';
+  } catch {
+    return false;
+  }
+}
+
 export function build(input: BuildInput): { record: RunRecord; shown: number; reasons: Record<string, number> } {
   const { cfg, now, candidates, tags, overrides } = input;
   const today = istDate(now);
@@ -113,6 +129,11 @@ export function build(input: BuildInput): { record: RunRecord; shown: number; re
     reasons[d.reason] = (reasons[d.reason] ?? 0) + 1;
     // A post the admin hid or blocked never reaches the published review file (review fix).
     if (d.reason === 'hidden' || d.reason === 'blocked') continue;
+    // The ad that triggered a scam hold is listed too, so the admin sees the evidence, not only its siblings
+    // (review fix, round 2). review.json holds only public post data.
+    if (t?.genuine === 'pay_or_scam') {
+      review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: 'scam_flagged', role: t.role, llmCities: t.cities, ruleCities: c.loc.cities });
+    }
     // Held back with its employer: listed in the review queue so the admin can check it.
     if (d.reason === 'scam_company' && t) {
       review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: 'scam_company', role: t.role, llmCities: t.cities, ruleCities: c.loc.cities });
@@ -273,6 +294,13 @@ export function build(input: BuildInput): { record: RunRecord; shown: number; re
   writeFileSync(RUNS, `${JSON.stringify(runs, null, 1)}\n`);
   const supaUrl = optionalEnv('SUPABASE_URL');
   const supaKey = optionalEnv('SUPABASE_PUBLISHABLE_KEY');
+  // config.js is downloaded by every visitor: refuse anything but a public key (review fix, round 2).
+  if (supaKey && !isPublicSupabaseKey(supaKey)) {
+    throw new Error('SUPABASE_PUBLISHABLE_KEY is not a publishable (or anon) key; refusing to publish it.');
+  }
+  if (supaUrl && !/^https:\/\/[a-z0-9]{20}\.supabase\.co\/?$/.test(supaUrl)) {
+    throw new Error('SUPABASE_URL is not a https://<project-ref>.supabase.co address.');
+  }
   writeFileSync(
     'site/js/config.js',
     `window.ZSS_CONFIG = ${JSON.stringify({ supabaseUrl: supaUrl ?? '', supabaseKey: supaKey ?? '', panels: Boolean(cfg.site.panels && supaUrl && supaKey) })};\n`,

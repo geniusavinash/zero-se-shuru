@@ -4,8 +4,14 @@
 #   pwsh -File tools\import-keys.ps1 -File C:\Users\avina\secrets\NEW_KEYS.txt
 param([Parameter(Mandatory)][string]$File)
 $ErrorActionPreference = 'Stop'
-if ($File -match 'OneDrive') { throw 'Keep key files outside OneDrive.' }
 if (-not (Test-Path -LiteralPath $File)) { throw "No file at $File" }
+# Judge the real location, so a relative path inside a synced folder is caught too (review fix, round 2).
+$full = (Resolve-Path -LiteralPath $File).ProviderPath
+$syncRoots = @($env:OneDrive, $env:OneDriveCommercial, $env:OneDriveConsumer) | Where-Object { $_ }
+if ($full -match 'OneDrive' -or ($syncRoots | Where-Object { $full.StartsWith($_, [StringComparison]::OrdinalIgnoreCase) })) {
+  throw 'Keep key files outside OneDrive.'
+}
+$File = $full
 
 # Label in the file -> (variable name, the shape the value must have).
 $labels = [ordered]@{

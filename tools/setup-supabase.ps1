@@ -34,8 +34,19 @@ function Invoke-Sql([string]$Ref, [string]$Sql) {
   return Invoke-Supa POST "/projects/$Ref/database/query" @{ query = $Sql }
 }
 
+# The project this laptop already uses (from SUPABASE_URL) wins; otherwise exactly one project with the
+# name, never the first of several (review fix, round 2).
 function Get-Project {
-  return @(Invoke-Supa GET '/projects') | Where-Object { $_.name -eq $projectName } | Select-Object -First 1
+  $all = @(Invoke-Supa GET '/projects')
+  $saved = [Environment]::GetEnvironmentVariable('SUPABASE_URL', 'User')
+  if ($saved -match '^https://([a-z0-9]{20})\.supabase\.co') {
+    $byRef = @($all | Where-Object { $_.ref -eq $Matches[1] })
+    if ($byRef.Count -eq 1) { return $byRef[0] }
+    throw "SUPABASE_URL names project $($Matches[1]), which this token cannot see."
+  }
+  $named = @($all | Where-Object { $_.name -eq $projectName })
+  if ($named.Count -gt 1) { throw "$($named.Count) projects are named $projectName; set SUPABASE_URL to the one to use." }
+  return $named | Select-Object -First 1
 }
 
 function Hide-Email([string]$Address) {
@@ -48,18 +59,18 @@ function Hide-Email([string]$Address) {
 if ($MakeAdmin) {
   $project = Get-Project
   if (-not $project) { throw "No project named $projectName. Run this script without -MakeAdmin first." }
-  $users = @(Invoke-Sql $project.ref 'select id::text as id, email, created_at from auth.users order by created_at')
-  if ($users.Count -eq 0) { throw 'No account yet. Sign up on the site first, then run this again.' }
-  if ($Email) {
-    $user = $users | Where-Object { $_.email -and $_.email.ToLowerInvariant() -eq $Email.Trim().ToLowerInvariant() } | Select-Object -First 1
-    if (-not $user) { throw "No account with that email. Accounts: $(($users | ForEach-Object { Hide-Email $_.email }) -join ', ')" }
-  }
-  elseif ($users.Count -eq 1) { $user = $users[0] }
-  else { throw "$($users.Count) accounts exist ($(($users | ForEach-Object { Hide-Email $_.email }) -join ', ')). Run again with -Email <your email>." }
+  # Always by the owner's email, never "the only account": sign-up does not prove email ownership, so the
+  # owner must also confirm the sign-up time shown below was theirs and that they can sign in with their
+  # own password (review fix, round 2).
+  if (-not $Email) { throw 'Run with -Email <the email you signed up with>.' }
+  $users = @(Invoke-Sql $project.ref 'select id::text as id, email, created_at, last_sign_in_at from auth.users order by created_at')
+  $user = $users | Where-Object { $_.email -and $_.email.ToLowerInvariant() -eq $Email.Trim().ToLowerInvariant() } | Select-Object -First 1
+  if (-not $user) { throw "No account with that email ($($users.Count) accounts exist). Sign up on the site first." }
   if ($user.id -notmatch '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$') { throw 'Unexpected user id format.' }
   Invoke-Sql $project.ref "insert into public.admins (user_id) values ('$($user.id)') on conflict do nothing" | Out-Null
   $count = @(Invoke-Sql $project.ref 'select count(*)::int as n from public.admins')[0].n
-  "Admin set: $(Hide-Email $user.email). Admins now: $count."
+  "Admin set: $(Hide-Email $user.email), signed up $($user.created_at), last sign-in $($user.last_sign_in_at). Admins now: $count."
+  'Confirm that sign-up time was you and that you can sign in with your own password; if not, remove the row.'
   return
 }
 

@@ -45,6 +45,13 @@ const context = arg('context', '')
   .map((p) => `===== FILE: ${p.trim()} =====\n${readFileSync(p.trim(), 'utf8')}`)
   .join('\n\n');
 
+// Optional screenshots (PNG), sent as images so the model can see the current design.
+const images = arg('images', '')
+  .split(',')
+  .map((p) => p.trim())
+  .filter((p) => p !== '')
+  .map((p) => ({ type: 'input_image' as const, detail: 'high' as const, image_url: `data:image/png;base64,${readFileSync(p).toString('base64')}` }));
+
 const client = new OpenAI({ ...connectionFromEnv(), timeout: 20 * 60_000, maxRetries: 1 });
 
 const filesSchema = {
@@ -63,7 +70,12 @@ const stream = await client.responses.create({
   reasoning: { effort },
   max_output_tokens: 120_000,
   instructions: task,
-  input: context === '' ? 'Begin.' : context,
+  input:
+    images.length === 0
+      ? context === ''
+        ? 'Begin.'
+        : context
+      : [{ role: 'user' as const, content: [{ type: 'input_text' as const, text: context === '' ? 'Begin.' : context }, ...images] }],
   store: false,
   stream: true,
   ...(mode === 'files' ? { text: { format: { type: 'json_schema' as const, name: 'files', schema: filesSchema, strict: true } } } : {}),

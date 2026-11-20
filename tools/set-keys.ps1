@@ -36,7 +36,9 @@ foreach ($name in $asked.Keys) {
   $prompt, $shape = $asked[$name]
   for ($try = 1; $try -le 3; $try++) {
     $secure = Read-Host -AsSecureString -Prompt "$prompt [$name] (paste, then Enter; Enter alone skips)"
-    $plain = [Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure))
+    # The plain-text copy in unmanaged memory is zeroed and freed at once (review fix, round 2).
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { $plain = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
     if ([string]::IsNullOrWhiteSpace($plain)) { "$name skipped"; break }
     $plain = $plain.Trim()
     $twin = $everyName | Where-Object { $_ -ne $name -and [Environment]::GetEnvironmentVariable($_, 'User') -ceq $plain } | Select-Object -First 1

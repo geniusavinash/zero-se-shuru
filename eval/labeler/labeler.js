@@ -53,11 +53,10 @@ function replacement() {
 function renderProgress() {
   const labelled = main.filter(done).length;
   const deadCount = rows.filter(dead).length;
-  const needed = Math.max(0, deadCount - spares.filter(done).length);
-  $('progress').textContent = `${labelled} of 50 labelled · ${deadCount} dead ${deadCount === 1 ? 'link' : 'links'} · ${needed} ${needed === 1 ? 'spare' : 'spares'} needed`;
   const { next, remaining } = replacement();
+  $('progress').textContent = `${labelled} of 50 labelled · ${deadCount} dead ${deadCount === 1 ? 'link' : 'links'} · ${remaining} ${remaining === 1 ? 'spare' : 'spares'} needed`;
   const hint = $('spare-hint');
-  hint.textContent = next ? `Label the next spare: ${next.n}.` : remaining ? 'Label the next spare. No unused spares remain in this sheet.' : needed ? 'Label the next spare.' : '';
+  hint.textContent = next ? `Label the next spare: ${next.n}.` : remaining ? 'Label the next spare. No unused spares remain in this sheet.' : '';
   hint.hidden = !hint.textContent;
   $('complete').hidden = labelled !== 50 || remaining !== 0;
 }

@@ -1,0 +1,9 @@
+You are a worker on this repo. Make three small fixes from an independent review. Change only the files named here, keep everything else exactly as it is, and return the full content of each changed file.
+
+1. `src/sources/adzuna.ts`
+   a. `adzunaLink`: accept (and upgrade http to https for) only Adzuna's own hosts: exactly `adzuna.in`, `adzuna.com`, `adzuna.co.uk`, or a subdomain of one of them (e.g. `www.adzuna.in`). `adzuna.example.com` must be rejected. Reject any URL that has a username or password. Return `undefined` for anything that is not https after the upgrade.
+   b. Paging: `parseAdzunaPage` must also return `raw`, the number of entries in `results` (before any row is skipped). In `readAdzuna`, stop paging when `parsed.raw < 50` (the page was not full), not when the number of accepted jobs is below 50: one bad row on a full page must not stop the later pages.
+2. `tests/sources.test.ts`: in the existing "adzuna parser" describe block, add assertions: `adzunaLink('http://www.adzuna.example.com/x')` is undefined; `adzunaLink('https://user:pw@www.adzuna.in/x')` is undefined; `adzunaLink('http://adzuna.co.uk/jobs/1')` is `'https://adzuna.co.uk/jobs/1'`; and `parseAdzunaPage(page)?.raw` is 3 for the existing 3-entry page. Keep every existing test.
+3. `eval/labeler/labeler.js`: the progress line's "spares needed" and the spare hint must both come from the same ordered calculation that `replacement()` uses (the spares are consumed in draw order; a dead spare consumes a draw without filling a vacancy). Labelling a later spare first must not make the page say "0 spares needed" while an earlier required spare is unfinished. Keep the rest of the file unchanged.
+
+The repo is TypeScript with `strict` and `noUncheckedIndexedAccess`; keep the code style of the files. In `notes`, say what you changed in one line per file.

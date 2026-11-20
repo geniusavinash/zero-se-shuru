@@ -75,6 +75,7 @@ describe('adzuna parser on the documented answer shape', () => {
     const r = parseAdzunaPage(page);
     expect(r).toBeDefined();
     expect(r?.count).toBe(1234);
+    expect(r?.raw).toBe(3);
     expect(r?.skipped).toBe(2);
     expect(r?.jobs).toHaveLength(1);
     const j = r!.jobs[0]!;
@@ -92,5 +93,8 @@ describe('adzuna parser on the documented answer shape', () => {
   it('upgrades only Adzuna links', () => {
     expect(adzunaLink('http://evil.example/www.adzuna.in')).toBeUndefined();
     expect(adzunaLink('https://www.adzuna.in/land/ad/1')).toBe('https://www.adzuna.in/land/ad/1');
+    expect(adzunaLink('http://www.adzuna.example.com/x')).toBeUndefined();
+    expect(adzunaLink('https://user:pw@www.adzuna.in/x')).toBeUndefined();
+    expect(adzunaLink('http://adzuna.co.uk/jobs/1')).toBe('https://adzuna.co.uk/jobs/1');
   });
 });

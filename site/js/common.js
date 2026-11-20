@@ -160,11 +160,13 @@ export function card(job, tax, save = null) {
     h('div', [title, ...badges], 'card-title'), h('p', job.company, 'company'),
     locations.length ? h('div', locations, 'chips') : null,
     job.locationText ? h('p', job.locationText, 'muted') : null,
-    h('p', `${tax.roleName(job.role)} · ${TYPES[job.jobType] ?? pretty(job.jobType)}`, 'card-meta'),
-    h('p', `${job.postedAt ? 'Posted' : 'First seen'} ${ist(job.postedAt ?? job.firstSeen)}`, 'muted'),
-    h('p', [h('strong', "Why it's here: "), job.why]),
-    h('p', `Source: ${tax.sourceName(job.source)}`, 'muted'),
-    h('div', [apply, save, adzuna(job) ? link('Jobs by Adzuna', 'https://www.adzuna.in', 'adzuna') : null], 'card-actions')
+    h('p', [h('span', tax.roleName(job.role)), ' ', h('span', TYPES[job.jobType] ?? pretty(job.jobType))], 'card-meta'),
+    h('p', [h('strong', "Why it's here: "), job.why], 'why'),
+    h('div', [
+      h('p', `${job.postedAt ? 'Posted' : 'First seen'} ${ist(job.postedAt ?? job.firstSeen)}`, 'muted'),
+      h('p', `Source: ${tax.sourceName(job.source)}`, 'muted')
+    ], 'listing-meta'),
+    h('div', [h('div', [apply, adzuna(job) ? link('Jobs by Adzuna', 'https://www.adzuna.in', 'adzuna') : null], 'apply-links'), save], 'card-actions')
   ], 'card');
 }
 

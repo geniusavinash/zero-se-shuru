@@ -126,6 +126,10 @@ revoke all on function public.admin_stats() from public;
 grant execute on function public.admin_stats() to authenticated;
 
 -- Explicit grants, so access never depends on the platform's default privileges. RLS still decides rows.
+-- GRANT adds but never removes, so the platform's broad defaults (which include TRUNCATE, a privilege
+-- row-level security does not cover) are revoked first (review fix, round 2).
+revoke all on table public.admins, public.profiles, public.saved_jobs, public.hidden_posts, public.blocked_companies,
+  public.tag_fixes, public.board_switches, public.admin_audit from public, anon, authenticated;
 grant usage on schema public to anon, authenticated;
 grant select, insert, update, delete on public.profiles, public.saved_jobs to authenticated;
 grant select on public.hidden_posts, public.blocked_companies, public.tag_fixes, public.board_switches to anon, authenticated;
