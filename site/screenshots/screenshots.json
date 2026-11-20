@@ -1,0 +1,62 @@
+[
+ {
+  "file": "01-landing.jpg",
+  "screen": "Landing page (laptop)",
+  "shows": "Search by title, role, company or city; the roles and cities with the most openings; when the list was last updated; \"Just added\" from company career pages."
+ },
+ {
+  "file": "02-openings.jpg",
+  "screen": "Openings list",
+  "shows": "Filters and cards: company monogram, city links, role, job type, \"Why it's here\", Apply, and the \"Jobs by Adzuna\" badge on Adzuna listings."
+ },
+ {
+  "file": "03-how-it-works.jpg",
+  "screen": "How it works and the numbers",
+  "shows": "We collect, we check, you apply; the numbers strip is computed from the data on the page."
+ },
+ {
+  "file": "04-phone.jpg",
+  "screen": "Landing page (phone, 390 px)",
+  "shows": "The same page on a phone: menu button, stacked search, no horizontal scroll."
+ },
+ {
+  "file": "05-user-profile.jpg",
+  "screen": "User panel: profile",
+  "shows": "A student signs in with email and password and sets a profile; preferred roles and cities drive the \"For you\" tab."
+ },
+ {
+  "file": "06-user-saved.jpg",
+  "screen": "User panel: saved jobs",
+  "shows": "Saved jobs with an application status (saved, applied, interview, offer, rejected) and a note, stored per user with row-level security."
+ },
+ {
+  "file": "07-admin-dashboard.jpg",
+  "screen": "Admin: dashboard",
+  "shows": "Posts, last refresh, tagging accuracy and cost per 1,000 posts; \"Run now\" opens the refresh workflow; account counts."
+ },
+ {
+  "file": "08-admin-funnel.jpg",
+  "screen": "Admin: refresh funnel",
+  "shows": "How tens of thousands of posts read become the published list, per source: India, candidates, tagged, eligible, after dedupe, shown."
+ },
+ {
+  "file": "09-admin-accuracy.jpg",
+  "screen": "Admin: accuracy and cost",
+  "shows": "The 50-post check: who labelled it, role and city accuracy with 95% intervals, fresher share by source, and the cost per 1,000 posts."
+ },
+ {
+  "file": "10-admin-runs.jpg",
+  "screen": "Admin: recent runs",
+  "shows": "Every refresh, scheduled or manual: posts shown, new posts, LLM calls and cost; a blocked run is marked with its reason."
+ },
+ {
+  "file": "11-admin-review.jpg",
+  "screen": "Admin: review queue",
+  "shows": "Posts where the model's cities and the location rule disagree, with Hide post, Block company and Fix tags actions."
+ },
+ {
+  "file": "12-privacy.jpg",
+  "screen": "Privacy page",
+  "shows": "What an account stores, who can see it, where it is stored, and what the site does not do."
+ }
+]
