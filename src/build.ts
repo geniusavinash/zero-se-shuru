@@ -84,6 +84,26 @@ export interface BuildInput {
 }
 
 /**
+ * The card's location line. Adzuna repeats each place as its parts ("Bangalore, Karnataka | Karnataka |
+ * Bangalore"); a location whose every comma-part was already shown is dropped. Display only: the India
+ * rule and the LLM still read every field.
+ */
+export function locationText(locations: string[]): string {
+  const kept: string[] = [];
+  const seen = new Set<string>();
+  for (const loc of locations) {
+    const parts = loc
+      .split(',')
+      .map((p) => p.trim().toLowerCase())
+      .filter((p) => p !== '');
+    if (parts.length === 0 || parts.every((p) => seen.has(p))) continue;
+    kept.push(loc.trim());
+    for (const p of parts) seen.add(p);
+  }
+  return kept.join(' | ');
+}
+
+/**
  * True only for a key that is safe to ship to browsers: a new `sb_publishable_` key, or a legacy JWT whose
  * role claim is `anon`. A secret key (`sb_secret_`) or a `service_role` JWT is never public.
  */
@@ -162,7 +182,7 @@ export function build(input: BuildInput): { record: RunRecord; shown: number; re
       role: fix?.role ?? t.role,
       cities,
       cityLinks: cities.map((city) => ({ city, url: job.url })),
-      locationText: job.locations.join(' | ') || 'India',
+      locationText: locationText(job.locations) || 'India',
       remote: c.loc.remote || t.location_status === 'remote_india',
       jobType: t.job_type,
       postedAt: job.postedAt,

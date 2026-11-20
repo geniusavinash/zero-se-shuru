@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isPublicSupabaseKey } from '../src/build.ts';
+import { isPublicSupabaseKey, locationText } from '../src/build.ts';
 import { loadConfig, parseBoards } from '../src/config.ts';
 
 describe('config', () => {
@@ -31,5 +31,14 @@ describe('public Supabase key guard (config.js is shipped to every visitor)', ()
     expect(isPublicSupabaseKey('sb_secret_abc123')).toBe(false);
     expect(isPublicSupabaseKey(jwt({ role: 'service_role' }))).toBe(false);
     expect(isPublicSupabaseKey('sb_publishable_a sb_secret_b')).toBe(false);
+  });
+});
+
+describe('card location line', () => {
+  it('drops a place already shown as part of an earlier one', () => {
+    expect(locationText(['Bangalore, Karnataka', 'Karnataka', 'Bangalore'])).toBe('Bangalore, Karnataka');
+    expect(locationText(['India', 'Bangalore, Karnataka', 'Karnataka', 'Bangalore', 'Chennai, Tamil Nadu', 'Tamil Nadu', 'Chennai'])).toBe('India | Bangalore, Karnataka | Chennai, Tamil Nadu');
+    expect(locationText(['Pune', 'Bengaluru'])).toBe('Pune | Bengaluru');
+    expect(locationText([])).toBe('');
   });
 });
