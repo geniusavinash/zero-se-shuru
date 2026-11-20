@@ -209,9 +209,9 @@ export async function rows(queryAtPage) {
   }
 }
 export const corrections = client => Promise.all([
-  rows((a, b) => client.from('hidden_posts').select('job_key,reason').order('job_key').range(a, b)),
-  rows((a, b) => client.from('blocked_companies').select('company_key,reason').order('company_key').range(a, b)),
-  rows((a, b) => client.from('tag_fixes').select('job_key,role,cities,reason').order('job_key').range(a, b))
+  rows((a, b) => client.from('hidden_posts').select('job_key,reason,at').order('job_key').range(a, b)),
+  rows((a, b) => client.from('blocked_companies').select('company_key,reason,at').order('company_key').range(a, b)),
+  rows((a, b) => client.from('tag_fixes').select('job_key,role,cities,reason,at').order('job_key').range(a, b))
 ]);
 export function corrected(jobs, [hidden, blocked, fixes]) {
   const hiddenKeys = new Set(hidden.map(row => row.job_key));

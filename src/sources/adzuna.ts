@@ -7,7 +7,7 @@
 import type { HttpClient } from '../http.ts';
 import type { Job } from '../types.ts';
 import { htmlToText, sha256, stripContacts } from '../text.ts';
-import { type BoardRead, clean, httpsUrl, isRecord, str, toIso } from './shared.ts';
+import { type BoardRead, clean, isRecord, str, toIso } from './shared.ts';
 
 export interface AdzunaQuery {
   name: string;
@@ -35,6 +35,19 @@ export function adzunaUrl(appId: string, appKey: string, q: AdzunaQuery, page: n
   return `https://api.adzuna.com/v1/api/jobs/in/search/${page}?${p.toString()}`;
 }
 
+/** Adzuna's documented examples use http:// links; its own site serves https, so its links are upgraded. */
+export function adzunaLink(v: unknown): string | undefined {
+  const s = str(v);
+  if (!s) return undefined;
+  try {
+    const u = new URL(s);
+    if (u.protocol === 'http:' && /(^|\.)adzuna\.[a-z.]+$/i.test(u.hostname)) u.protocol = 'https:';
+    return u.protocol === 'https:' ? u.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function parseAdzunaPage(data: unknown): { jobs: Job[]; skipped: number; count?: number } | undefined {
   if (!isRecord(data) || !Array.isArray(data.results)) return undefined;
   const jobs: Job[] = [];
@@ -45,7 +58,7 @@ export function parseAdzunaPage(data: unknown): { jobs: Job[]; skipped: number; 
       continue;
     }
     const id = typeof r.id === 'string' || typeof r.id === 'number' ? String(r.id) : undefined;
-    const url = httpsUrl(r.redirect_url);
+    const url = adzunaLink(r.redirect_url);
     const title = clean(htmlToText(String(r.title ?? '')));
     if (!id || !url || !title) {
       skipped++;

@@ -19,11 +19,14 @@ $headers = @{ Authorization = "Bearer $token" }
 function Invoke-Supa([string]$Method, [string]$Path, $Body) {
   $req = @{ Method = $Method; Uri = "$api$Path"; Headers = $headers; ContentType = 'application/json' }
   if ($null -ne $Body) { $req.Body = ($Body | ConvertTo-Json -Depth 10 -Compress) }
-  try { return Invoke-RestMethod @req }
+  try { $res = Invoke-RestMethod @req }
   catch {
     $status = $_.Exception.Response.StatusCode.value__
     throw "Supabase $Method $Path failed (HTTP $status): $($_.ErrorDetails.Message)"
   }
+  # Invoke-RestMethod writes a JSON array as ONE object; returning the variable unrolls it into items, so
+  # callers filter rows, not the whole array (bug found 2026-11-20: all four keys matched as one "key").
+  return $res
 }
 
 function Invoke-Sql([string]$Ref, [string]$Sql) {
@@ -131,14 +134,23 @@ $auth = Invoke-Supa GET "/projects/$ref/config/auth"
 
 # ---- Keys the page may hold: the publishable key (or the legacy anon key) ----
 function Find-PublicKey($Keys) {
-  $key = $Keys | Where-Object { $_.type -eq 'publishable' -and $_.api_key -like 'sb_publishable_*' } | Select-Object -First 1
-  if (-not $key) { $key = $Keys | Where-Object { $_.name -eq 'anon' -and $_.api_key -like 'eyJ*' } | Select-Object -First 1 }
-  return $key
+  foreach ($k in $Keys) {
+    if ($k.type -eq 'publishable' -and $k.api_key -is [string] -and $k.api_key -like 'sb_publishable_*') { return $k }
+  }
+  foreach ($k in $Keys) {
+    if ($k.name -eq 'anon' -and $k.api_key -is [string] -and $k.api_key -like 'eyJ*') { return $k }
+  }
+  return $null
 }
 $key = Find-PublicKey @(Invoke-Supa GET "/projects/$ref/api-keys?reveal=false")
 if (-not $key) { $key = Find-PublicKey @(Invoke-Supa GET "/projects/$ref/api-keys?reveal=true") }
 if (-not $key) { throw 'No publishable or anon key found for the project.' }
+$value = [string]$key.api_key
+# Only a public key may ever reach this variable: the page ships it to every visitor.
+if ($value -match '\s' -or $value -like 'sb_secret_*' -or -not ($value -like 'sb_publishable_*' -or $value -like 'eyJ*')) {
+  throw 'The key found is not a single publishable key; nothing saved.'
+}
 [Environment]::SetEnvironmentVariable('SUPABASE_URL', "https://$ref.supabase.co", 'User')
-[Environment]::SetEnvironmentVariable('SUPABASE_PUBLISHABLE_KEY', $key.api_key, 'User')
-"Saved SUPABASE_URL (https://$ref.supabase.co) and SUPABASE_PUBLISHABLE_KEY ($(if ($key.type) { $key.type } else { $key.name }), $($key.api_key.Length) chars)."
+[Environment]::SetEnvironmentVariable('SUPABASE_PUBLISHABLE_KEY', $value, 'User')
+"Saved SUPABASE_URL (https://$ref.supabase.co) and SUPABASE_PUBLISHABLE_KEY ($(if ($key.type) { $key.type } else { $key.name }) key, $($value.Length) chars)."
 'Done. Next: sign up on the site, then run this script with -MakeAdmin.'

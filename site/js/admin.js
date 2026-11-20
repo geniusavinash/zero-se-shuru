@@ -1,5 +1,5 @@
 import { $, PANEL_CONFIG, actionStatus, authForm, button, card, corrections, count, debounce, evidence, h,
-  input, isStale, json, label, link, options, pager, pretty, report, result, rows, searcher, secureUrl,
+  input, isStale, ist, json, keysOf, label, link, options, pager, pretty, report, result, rows, searcher, secureUrl,
   signOutBar, snapshot, strip, table, tabs, taxonomy } from './common.js';
 
 const host = $('panel');
@@ -63,7 +63,7 @@ function singleOverride(client, tableName, keyColumn, key, map, config) {
     current: () => map.get(key),
     async write(reason) {
       const row = { [keyColumn]: key, ...config.values?.(), reason };
-      const saved = await result(client.from(tableName).upsert(row, { onConflict: keyColumn }).select(`${keyColumn},reason`).single());
+      const saved = await result(client.from(tableName).upsert(row, { onConflict: keyColumn }).select(`${keyColumn},reason,at`).single());
       map.set(key, { ...row, ...saved });
     },
     async erase() {
@@ -78,10 +78,15 @@ const inferredCompanyKey = name => employerName(name)
   .replace(/(?:[\s,.]+(?:private|pvt|limited|ltd|llp|inc|llc|corporation|corp)\.?)+$/i, '')
   .replace(/[^\p{L}\p{N}]+/gu, '');
 
-function moderator(client, jobs, tax, meta, [hidden, blocked, fixes]) {
-  const hideMap = asMap(hidden, row => row.job_key);
-  const blockMap = asMap(blocked, row => row.company_key);
-  const fixMap = asMap(fixes, row => row.job_key);
+// The overrides as maps, shared by the moderation forms and the Overrides tab so both always agree.
+const overrideMaps = ([hidden, blocked, fixes]) => ({
+  hidden: asMap(hidden, row => row.job_key),
+  blocked: asMap(blocked, row => row.company_key),
+  fixes: asMap(fixes, row => row.job_key)
+});
+
+function moderator(client, jobs, tax, meta, maps) {
+  const { hidden: hideMap, blocked: blockMap, fixes: fixMap } = maps;
   const companyKeys = new Map();
   for (const job of jobs) {
     if (!job.companyKey) continue;
@@ -114,6 +119,52 @@ function moderator(client, jobs, tax, meta, [hidden, blocked, fixes]) {
     });
     return h('div', [hideEdit, blockEdit, fixEdit], 'moderation');
   };
+}
+
+// Every active override with an Undo. A hidden post or blocked company leaves the published list at the
+// next refresh, so this tab is the only place to find it again (review fix #10).
+function overrideList(client, jobs, tax, maps) {
+  const byKey = new Map();
+  for (const job of jobs) for (const key of keysOf(job)) byKey.set(key, job);
+  const post = key => {
+    const job = byKey.get(key);
+    return h('div', [h('strong', job ? job.title : key),
+      h('p', job ? `${job.company} · ${key}` : 'Not in the published list', 'muted')]);
+  };
+  const company = key => {
+    const job = jobs.find(item => item.companyKey === key);
+    return h('div', [h('strong', job?.company ?? key), h('p', key, 'muted')]);
+  };
+  const since = row => row.at ? ist(row.at, true) : 'Unknown';
+  const cityList = cities => !Array.isArray(cities) ? 'Unchanged' : cities.length ? cities.map(tax.cityName).join(', ') : 'No city';
+  const undo = (tableName, column, key, map) => {
+    const control = button('Undo');
+    const feedback = actionStatus();
+    control.addEventListener('click', async () => {
+      control.disabled = true;
+      report(feedback, 'Working…');
+      try {
+        await result(client.from(tableName).delete().eq(column, key).select(column).single());
+        map.delete(key);
+        report(feedback, 'Removed. Fully applied after the next refresh.');
+      } catch (error) {
+        control.disabled = false;
+        report(feedback, error?.message ? `Change failed: ${error.message}` : 'Change failed. Please try again.', true);
+      }
+    });
+    return h('div', [control, feedback]);
+  };
+  return [
+    table(`Hidden posts (${count(maps.hidden.size)})`, ['Post', 'Reason', 'Since (IST)', 'Action'],
+      [...maps.hidden.values()].map(row => [post(row.job_key), row.reason || 'No reason', since(row),
+        undo('hidden_posts', 'job_key', row.job_key, maps.hidden)])),
+    table(`Blocked companies (${count(maps.blocked.size)})`, ['Company', 'Reason', 'Since (IST)', 'Action'],
+      [...maps.blocked.values()].map(row => [company(row.company_key), row.reason || 'No reason', since(row),
+        undo('blocked_companies', 'company_key', row.company_key, maps.blocked)])),
+    table(`Tag fixes (${count(maps.fixes.size)})`, ['Post', 'Role', 'Cities', 'Reason', 'Action'],
+      [...maps.fixes.values()].map(row => [post(row.job_key), row.role ? tax.roleName(row.role) : 'Unchanged',
+        cityList(row.cities), row.reason || 'No reason', undo('tag_fixes', 'job_key', row.job_key, maps.fixes)]))
+  ];
 }
 
 function renderBoards(view, meta, client, switches) {
@@ -178,8 +229,14 @@ async function start() {
     if (meta?.site?.panels === false) { report(status, 'The admin panel is disabled.'); return; }
     report(status, '');
     const tax = taxonomy(meta, jobs ?? []);
-    const views = tabs(host, ['Dashboard', 'Review queue', 'Posts', 'Boards']);
-    const [dash, queue, posts, boards] = views.panels;
+    const maps = overrides ? overrideMaps(overrides) : null;
+    const overrideBox = h('div');
+    // Painted each time the tab opens, so overrides saved in the other tabs show up.
+    const paintOverrides = () => overrideBox.replaceChildren(...(maps ? overrideList(client, jobs ?? [], tax, maps)
+      : [h('p', 'Could not load overrides. Reload to try again.', 'error')]));
+    const views = tabs(host, ['Dashboard', 'Review queue', 'Posts', 'Overrides', 'Boards'], i => { if (i === 3) paintOverrides(); });
+    const [dash, queue, posts, overridesView, boards] = views.panels;
+    overridesView.append(h('p', 'Every active override. Hidden posts and blocked companies leave the published list at the next refresh, so undo them here.'), overrideBox);
     const summary = h('div', [], 'strip');
     strip(summary, meta, jobs?.length ?? meta?.counts?.shown);
     const repo = secureUrl(meta?.site?.repoUrl);
@@ -192,7 +249,7 @@ async function start() {
     ]) : h('p', 'Account counts could not be loaded.', 'error');
     dash.append(summary, isStale(meta) ? h('p', 'The published snapshot is older than expected.', 'notice') : nullNode(),
       workflow ? link('Run now', workflow.href, 'primary') : h('p', 'The refresh workflow URL is unavailable.', 'muted'), counts, details);
-    const actions = overrides ? moderator(client, jobs ?? [], tax, meta, overrides) : () =>
+    const actions = maps ? moderator(client, jobs ?? [], tax, meta, maps) : () =>
       h('p', 'Could not load existing overrides. Reload to enable moderation.', 'error');
     if (!review) queue.append(h('p', 'Could not load data/review.json.', 'error'));
     else if (!review.length) queue.append(h('p', 'The review queue is empty.'));

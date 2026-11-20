@@ -11,16 +11,20 @@ _(Write 8–10 of your own prompts here, in your words, oldest first. Pick the o
 | Tool | Model | Used for |
 |---|---|---|
 | Claude Code | Claude Opus 5.5 | Lead: research, plan, pipeline code, integration, tests, deploy |
-| Codex CLI 0.171 (Azure OpenAI) | gpt-6.2-sol | Front-end: the page, the user panel and the admin panel |
-| Codex CLI 0.171 (Azure OpenAI) | gpt-6.2-astra | Independent code reviews |
+| `src/tools/gpt-worker.ts` (Azure OpenAI Responses API) | gpt-6.2-sol | Front-end: the page, the user panel and the admin panel |
+| `src/tools/gpt-worker.ts` (Azure OpenAI Responses API) | gpt-6.2-astra | Independent code reviews |
 | Azure OpenAI (in the product) | gpt-6-luna | Tagging each post: role, cities, fresher facts |
+
+Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it could not run any command (`docs/BUILD_LOG.md`), so `gpt-worker.ts` sends the same task straight to the Azure API and writes only the files it is allowed to.
 
 ## 3. Prompts sent to other models
 
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
 
-### Codex front-end worker (gpt-6.2-sol), 2026-11-20 13:45 IST
+### Front-end worker (gpt-6.2-sol), 2026-11-20 13:45 IST
+
+Written for Codex CLI, then sent through `gpt-worker.ts` with the contract and docs attached (`tasks/frontend.md`).
 
 ```
 You are the front-end worker on this repo. Another engineer owns everything outside site/.
