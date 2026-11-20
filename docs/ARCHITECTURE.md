@@ -176,27 +176,20 @@ The number removed and the merged pairs go to `meta.json`.
 
 ## 9. Public page (`site/index.html`)
 
-- **Top strip.** Four numbers, each linking to its evidence:
+The public page is the product a student uses; the evidence lives in the admin panel's Quality & runs tab (owner's decision, 2026-11-20, `docs/DECISIONS.md`).
 
-  | Number | Links to |
-  |---|---|
-  | Post count | the funnel |
-  | Last refresh (IST) | the run log |
-  | Accuracy | the eval report |
-  | Cost per 1,000 | the cost report |
-
-  The strip warns when the data is more than 30 hours old.
+- **Top strip.** Openings, companies hiring, and the last refresh (IST). It warns when the data is more than 30 hours old.
 - **Search and filters.** Role, city (with counts), job type, source type (company site or Adzuna), posted within 7 days.
 - **Card.** Title, company, cities, role, job type, posted or first-seen date, "why it's here", source and an Apply link.
   - Adzuna cards carry a "Jobs by Adzuna" badge, at least 116×23 px, linked to adzuna.in.
   - 50 cards show at first, then "Show more".
-- **How it works.**
+- **Footer.** "How we pick jobs" in three sentences, the "Jobs by Adzuna" attribution, and the removal contact.
+- **Admin panel, Quality & runs tab.**
   - The pipeline in six lines and the funnel per source.
-  - A sources table: docs, terms, why each source is allowed.
-  - Accuracy and cost, from `metrics.json`.
+  - A sources table: docs, terms, why each source is allowed, boards OK and failed.
+  - Accuracy and cost, from `metrics.json`, with who labelled the 50-post check.
   - The last 14 runs.
-  - The removal contact.
-- **Panels.** "Sign in" (user panel) and "Admin" links appear only when `panels: true`.
+- **Panels.** A "Sign in" link (user panel) in the header and a small "Admin" link in the footer appear only when `panels: true`.
 - **Live corrections.** On load, the page reads the hidden posts and tag fixes from Supabase, so a fix shows at once. If Supabase is down, the page still renders from `jobs.json`.
 - **Safety.** Phone first. Data is written with `textContent` only.
 

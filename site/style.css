@@ -109,7 +109,7 @@ button:disabled { cursor: not-allowed; color: var(--muted); background: var(--ti
 .header-row nav { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; }
 .header-row nav a { justify-content: center; padding-inline: .55rem; border-radius: var(--radius-sm); color: var(--accent); font-size: .84rem; font-weight: 700; text-decoration: none; }
 .header-row nav a:hover { background: var(--tint); text-decoration: underline; }
-#panel-links a:first-child { background: var(--tint); border: 1px solid var(--control); }
+#panel-links a { background: var(--tint); border: 1px solid var(--control); }
 @media (max-width: 42rem) {
   #main { padding-top: .85rem; }
   .header-row:has(#panel-links) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem .4rem; }
@@ -160,14 +160,14 @@ button:disabled { cursor: not-allowed; color: var(--muted); background: var(--ti
   color: var(--ink);
   text-decoration: none;
 }
-.stat:hover { border-color: var(--accent); text-decoration: none; }
-.stat:hover .eyebrow { text-decoration: underline; }
+a.stat:hover { border-color: var(--accent); text-decoration: none; }
+a.stat:hover .eyebrow { text-decoration: underline; }
 .stat .eyebrow { margin: 0; font-size: .68rem; line-height: 1.35; letter-spacing: .065em; }
 .stat strong { display: block; font-size: clamp(.92rem, 1.5vw, 1.12rem); font-variant-numeric: tabular-nums; line-height: 1.3; }
-.stat:is(:first-child, :last-child) strong { font-size: clamp(1.2rem, 2vw, 1.55rem); letter-spacing: -.035em; }
+a.stat:is(:first-child, :last-child) strong, .public-strip .stat:not(:last-child) strong { font-size: clamp(1.2rem, 2vw, 1.55rem); letter-spacing: -.035em; }
 .stat small { display: block; margin-top: .23rem; font-size: .75rem; font-weight: 500; }
+.public-strip .stat:last-child { grid-column: 1 / -1; }
 #main .stat { color: var(--hero-ink); background: #ffffff0b; border-color: #b1edcf55; }
-#main .stat:hover { background: #ffffff15; border-color: var(--hero-highlight); }
 #main .stat .eyebrow { color: var(--hero-highlight); }
 #main .stat small { color: var(--hero-muted); }
 .notice { margin: .85rem 0 0; padding: .7rem .85rem; border-inline-start: .25rem solid currentColor; border-radius: .4rem; background: var(--warn-bg); color: var(--warn); }
@@ -230,8 +230,15 @@ a.chip { min-height: 44px; padding-inline: .72rem; }
 .adzuna:hover { background: var(--tint); }
 .more { margin-top: .9rem; }
 
+/* Public footer */
+.site-footer { padding-block: clamp(1.4rem, 4vw, 2.5rem); border-top: 1px solid var(--line); background: var(--surface); color: var(--muted); font-size: .92rem; }
+.site-footer h2 { color: var(--ink); font-size: 1.2rem; }
+.site-footer p { max-width: 68ch; }
+.footer-bottom { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; margin-top: .75rem; padding-top: .55rem; border-top: 1px solid var(--line); }
+.footer-bottom a { margin-inline-start: auto; font-size: .82rem; justify-content: center; }
+
 /* Evidence and horizontally scrollable tables */
-.evidence { margin-top: clamp(2.4rem, 5vw, 4rem); padding-top: 1.25rem; border-top: 1px solid var(--line); }
+.evidence { margin-top: 1.25rem; padding-top: .35rem; border-top: 1px solid var(--line); }
 .evidence ol { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; margin-block: .85rem 1.4rem; padding-inline-start: 2.65rem; }
 .evidence li { padding: .42rem .65rem; border-inline-start: 2px solid var(--line); font-size: .92rem; }
 .evidence li::marker { color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -285,6 +292,8 @@ dd { margin-inline-start: 0; }
   .header-row { padding-block: .7rem; }
   #tagline { margin-inline-start: 2.35rem; }
   .strip { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; margin-top: 1.45rem; }
+  .public-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .public-strip .stat:last-child { grid-column: auto; }
   .stat { padding: .82rem 1rem; }
   .filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }

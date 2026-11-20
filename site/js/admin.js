@@ -234,21 +234,48 @@ async function start() {
     // Painted each time the tab opens, so overrides saved in the other tabs show up.
     const paintOverrides = () => overrideBox.replaceChildren(...(maps ? overrideList(client, jobs ?? [], tax, maps)
       : [h('p', 'Could not load overrides. Reload to try again.', 'error')]));
-    const views = tabs(host, ['Dashboard', 'Review queue', 'Posts', 'Overrides', 'Boards'], i => { if (i === 3) paintOverrides(); });
-    const [dash, queue, posts, overridesView, boards] = views.panels;
+    const views = tabs(host, ['Dashboard', 'Quality & runs', 'Review queue', 'Posts', 'Overrides', 'Boards'],
+      i => { if (i === 4) paintOverrides(); });
+    const [dash, quality, queue, posts, overridesView, boards] = views.panels;
     overridesView.append(h('p', 'Every active override. Hidden posts and blocked companies leave the published list at the next refresh, so undo them here.'), overrideBox);
     const summary = h('div', [], 'strip');
     strip(summary, meta, jobs?.length ?? meta?.counts?.shown);
     const repo = secureUrl(meta?.site?.repoUrl);
     const workflow = repo ? new URL(`${new URL(repo).pathname.replace(/\/+$/, '')}/actions/workflows/refresh.yml`, new URL(repo).origin) : null;
-    const details = h('div');
-    evidence(details, meta, tax, true);
     const counts = stats ? table('Account counts', ['Measure', 'Count'], [
       ['Users', count(stats.users)], ['Profiles', count(stats.profiles)],
       ...Object.entries(stats.saves_by_status ?? {}).map(([key, value]) => [`Saves: ${pretty(key)}`, count(value)])
     ]) : h('p', 'Account counts could not be loaded.', 'error');
     dash.append(summary, isStale(meta) ? h('p', 'The published snapshot is older than expected.', 'notice') : nullNode(),
-      workflow ? link('Run now', workflow.href, 'primary') : h('p', 'The refresh workflow URL is unavailable.', 'muted'), counts, details);
+      workflow ? link('Run now', workflow.href, 'primary') : h('p', 'The refresh workflow URL is unavailable.', 'muted'), counts);
+
+    const details = h('div');
+    evidence(details, meta, tax, true);
+    quality.append(h('p', 'How the published list is made, how well it is tagged, what it costs, and every recent run.'),
+      h('div', h('ol', [
+        'Read published openings from permitted APIs.',
+        'Screen for India, freshness and obvious exclusions.',
+        'Ask the model to tag roles and cities and report eligibility facts.',
+        'Apply fresher eligibility rules and flag disagreements for review.',
+        'Merge duplicate listings while keeping city-specific apply links.',
+        'Publish the list and its evidence after a successful refresh.'
+      ].map(line => h('li', line))), 'evidence'), details);
+    for (const tile of summary.querySelectorAll('a')) {
+      tile.addEventListener('click', event => {
+        event.preventDefault();
+        views.activate(1);
+        const section = $(tile.hash.slice(1));
+        if (section) {
+          const heading = section.querySelector('h3');
+          if (heading) {
+            heading.tabIndex = -1;
+            heading.focus({ preventScroll: true });
+          }
+          section.scrollIntoView({ block: 'start' });
+        }
+      });
+    }
+
     const actions = maps ? moderator(client, jobs ?? [], tax, meta, maps) : () =>
       h('p', 'Could not load existing overrides. Reload to enable moderation.', 'error');
     if (!review) queue.append(h('p', 'Could not load data/review.json.', 'error'));

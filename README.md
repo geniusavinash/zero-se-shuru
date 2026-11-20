@@ -2,7 +2,7 @@
 
 Real fresher jobs and internships in India, collected every day from companies' own job boards and the Adzuna API, tagged by an LLM with a role and cities, and checked against a strict "open to freshers" rule.
 
-**Live page:** https://zero-se-shuru.pages.dev · **Run history:** the Actions tab of this repo, and "Recent runs" on the page.
+**Live page:** https://zero-se-shuru.pages.dev · **Run history:** the Actions tab of this repo, and the admin panel's Quality & runs tab.
 
 ## What it does
 
@@ -16,11 +16,11 @@ Real fresher jobs and internships in India, collected every day from companies' 
 5. **Remove duplicates.** The same opening in several cities becomes one card. A company-board post beats its Adzuna copy.
 6. **Publish.** GitHub Actions runs it at 06:07 and 19:07 IST, commits the run record, and deploys the static page to Cloudflare Pages.
 
-Every card says *why it's here*. The page shows the funnel, the sources with their terms, the accuracy and cost, and the last 14 runs.
+Every card says *why it's here*. The public page is the product: search, filters, the cards, and when the list was last updated. The evidence (the funnel, the sources with their terms, the accuracy and cost, and the last 14 runs) is in the admin panel's **Quality & runs** tab, and its numbers are below and in the sheet.
 
 ## Numbers
 
-These come from `data/metrics.json` (one file, used by the page, this README and the sheet). Details and every miss: `eval/report.md`.
+These come from `data/metrics.json` (one file, used by the admin panel, this README and the sheet). Details and every miss: `eval/report.md`.
 
 Measured run `2026-11-20T10-19-01Z-local`, gpt-6-luna, prompt v1. 50 posts drawn at random from the 296 shown.
 
@@ -69,13 +69,14 @@ npm run serve                 # http://127.0.0.1:8080
 - Decisions: `docs/DECISIONS.md`.
 - AI tools and prompts: `docs/PROMPTS.md`.
 
-Five decisions I made (my own prompts, word for word, are in `docs/PROMPTS.md` part 1):
+Key decisions I made (my own prompts, word for word, are in `docs/PROMPTS.md` part 1):
 
 1. **A user panel and an admin panel, with login.** I overruled the AI here: Claude Code advised a lean build with no login. Students need to save and track jobs, and someone has to hide bad posts and fix tags without a code change.
 2. **The coding split across models.** I overruled the AI again: Claude Code was writing everything itself. gpt-6.2-sol wrote the front end, the labelling form and the workbook builder; gpt-6.2-astra reviewed the code twice, independently; Claude Code led, integrated and tested every file.
 3. **Supabase instead of my own VPS, for now.** I asked why not my 8-core, 32 GB VPS. I kept Supabase: login and row-level security come ready-made, and there is no server to keep alive while the page is being evaluated. The VPS stays an option for later.
 4. **Everything in one project folder.** Claude Code suggested a folder outside it; I kept the repo in the project folder, and only the packages are kept off the synced drive, through junctions.
-5. **The 50-post check labelled by an AI, and said so.** I asked Claude Code to finish the check itself. Every figure, on the page, in this README and in the sheet, says the labels are AI labels, not a hand check.
+5. **The 50-post check labelled by an AI, and said so.** I asked Claude Code to finish the check itself. Every figure, in the admin panel, in this README and in the sheet, says the labels are AI labels, not a hand check.
+6. **A production page, with the evidence behind the admin login.** I overruled the AI: its plan put the funnel, accuracy, cost and run history on the public page, as proof for reviewers. A student needs jobs, not test numbers, so the public page shows the jobs and when the list was last updated. The evidence moved to the admin panel's Quality & runs tab, and its numbers are in this README and the sheet.
 
 ## Limits
 

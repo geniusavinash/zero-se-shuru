@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co; img-src 'self' data:; style-src 'self'">
   <title>Zero Se Shuru — Fresher jobs in India</title>
+  <meta name="description" content="Real fresher jobs and internships in India, from companies' own career pages and Adzuna, refreshed every morning and evening.">
+  <meta property="og:title" content="Zero Se Shuru — Fresher jobs in India">
+  <meta property="og:description" content="Real fresher jobs and internships in India, from companies' own career pages and Adzuna, refreshed every morning and evening.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zero-se-shuru.pages.dev/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <script src="js/config.js"></script>
   <script type="module" src="js/app.js"></script>
@@ -14,7 +20,7 @@
   <header class="masthead">
     <div class="wrap header-row">
       <div><p class="brand" id="brand">Zero Se Shuru</p><p id="tagline">Fresher jobs and internships in India.</p></div>
-      <nav id="panel-links" aria-label="Account" hidden><a href="me.html">Sign in</a><a href="admin.html">Admin</a></nav>
+      <nav id="panel-links" aria-label="Account" hidden><a href="me.html">Sign in</a></nav>
     </div>
   </header>
   <main id="main" class="wrap" tabindex="-1">
@@ -22,7 +28,7 @@
       <p class="eyebrow">India · Early careers</p>
       <h1 id="headline">Find your first role.</h1>
       <p>Browse fresher jobs, internships and apprenticeships. See why each post made the list.</p>
-      <div id="strip" class="strip" aria-label="Listing and refresh figures"></div>
+      <div id="strip" class="strip public-strip" aria-label="Listing and refresh figures"></div>
       <p id="stale" class="notice" hidden></p>
       <p id="data-errors" class="error" role="status"></p>
     </section>
@@ -45,18 +51,15 @@
       <div id="jobs" class="cards"></div>
       <button id="more" class="more" type="button" hidden>Show more</button>
     </section>
-    <section id="how" class="evidence" aria-labelledby="how-title">
-      <h2 id="how-title">How it works</h2>
-      <ol>
-        <li>Read published openings from permitted APIs.</li>
-        <li>Screen for India, freshness and obvious exclusions.</li>
-        <li>Ask the model to tag roles and cities and report eligibility facts.</li>
-        <li>Apply fresher eligibility rules and flag disagreements for review.</li>
-        <li>Merge duplicate listings while keeping city-specific apply links.</li>
-        <li>Publish the list and its evidence after a successful refresh.</li>
-      </ol>
-      <div id="evidence"></div>
-    </section>
   </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <h2>How we pick jobs</h2>
+      <p>Openings come from companies' own career pages and from Adzuna. We keep only posts in India that are open to freshers: internships, apprenticeships, roles asking for under 1 year of experience, or posts that invite freshers. The list refreshes every morning and evening, and every card says why it is here.</p>
+      <p><a class="adzuna" href="https://www.adzuna.in">Jobs by Adzuna</a></p>
+      <div id="removal-contact"></div>
+      <div class="footer-bottom"><small>Zero Se Shuru · 2026</small><a id="admin-link" href="admin.html" hidden>Admin</a></div>
+    </div>
+  </footer>
 </body>
 </html>

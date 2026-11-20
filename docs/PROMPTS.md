@@ -19,6 +19,7 @@ My prompts to Claude Code, word for word in Hinglish, oldest first, with an Engl
 | 9 | "GPT BALE API USE KR RAHE HO YA NAHI DEVELOPMENT USHI SE KRWANA H" | Are you using the GPT APIs? Development should be done with them. | More of the coding went to gpt-6.2-sol: the labelling tool, the workbook builder, fixes. |
 | 10 | "DEVELOPMENT CHAL RAHA H YA NHAI CHATGPT SE - ADMIN PANEL USER PANEL - OR DESIGN BHI ACHHA HONA CHAHIYE OR KAM KA SPEED BADHA DO" | Is GPT doing the development? The design must be good too, and speed things up. | A design pass from screenshots, a second independent review, and parallel workers. |
 | 11 | "labeling ME NAHI SAMJHA / TUM APNA KAM 100% COMPLETE KRKE BATAO" | I didn't follow the labelling; finish the work yourself and report back. | Claude Code labelled the 50-post check, and every figure is marked "AI labels, not by hand" (`eval/labelling.json`). |
+| 12 | "ye mujhe as ye production project ki trah dikhana h / Accuracy and cost / Recent runs / ye sab yek alga admin ke under tab bna kr - hm apne detail me ye sab dikha denge" | I want this to look like a production project. Put Accuracy and cost, Recent runs and the rest in a separate admin tab; we will show them in our own write-up. | The public page became the product (jobs, last updated, a footer); the evidence moved to the admin panel's "Quality & runs" tab (gpt-6.2-sol, `tasks/production.md`). |
 
 ## 2. Tools
 
@@ -35,6 +36,10 @@ Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it coul
 
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
+
+### Production pass (gpt-6.2-sol), 2026-11-20 17:00 IST
+
+`tasks/production.md`, sent with the updated `docs/FRONTEND_CONTRACT.md` and the site files. The public page lost the evidence section and gained three figures for job seekers (openings, companies hiring, updated), a footer ("How we pick jobs", the Adzuna attribution, the removal contact, a small Admin link), a meta description, Open Graph tags and a favicon; the admin panel gained the "Quality & runs" tab, and its dashboard tiles open that tab at the right section. 97 s, about $0.26. Claude Code read every changed line, added a null check, removed a repeated sentence, redrew the favicon to match the header logo, and checked the page (1280 px and 390 px) and the signed-in admin panel in a real browser.
 
 ### The 50-post check labels (Claude Opus 5.5), 2026-11-20 16:40 IST
 

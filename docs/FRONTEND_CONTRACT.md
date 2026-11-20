@@ -109,13 +109,14 @@ Sign-in is email and password, with no email confirmation.
 
 ## Public page (index.html)
 
-1. **Top strip.** Four figures, each a link to its evidence:
-   - post count → `#funnel`;
-   - last refresh, IST, relative ("3 h ago") → `#runs`;
-   - accuracy, "role+city both right: 46/50", or "not measured yet" → `#accuracy`;
-   - cost per 1,000 posts → `#accuracy`.
+The public page is the product a student uses. The evidence (funnel, sources table, accuracy and cost, run history) lives in the admin panel's **Quality & runs** tab, and in the README and the sheet (owner's decision, 2026-11-20, `docs/DECISIONS.md`).
 
-   A warning banner shows when `generatedAt` is older than `site.staleAfterHours`.
+1. **Top strip.** Three figures for job seekers, plain text (not links):
+   - openings: the post count;
+   - companies hiring: `counts.companies`;
+   - last refresh, IST, with the relative time ("3 h ago").
+
+   A warning banner shows when `generatedAt` is older than `site.staleAfterHours`: "This list is older than expected. Confirm the opening on the company's page before applying."
 2. **Search.** A box that matches the start of words in the title, company, location text, role name, city names and city aliases.
 3. **Filters.**
    - Role (with counts).
@@ -143,14 +144,12 @@ Sign-in is email and password, with no email confirmation.
    - apply tag fixes (role and cities).
 
    Fail silently to the plain list.
-6. **How it works** (`#how`):
-   - the pipeline in 6 short lines;
-   - `#funnel`: a table, total and per source;
-   - `#sources`: name, docs and terms links, why it is allowed, attribution;
-   - `#accuracy`: the metrics with intervals as "92% (81–97%)", the model and prompt version, "as of run X";
-   - `#runs`: the last 14 runs, with time in IST, scheduled or manual, shown, new and cost; a red mark for failed runs with their `blockedReason`;
-   - the removal contact.
-7. **Header.** The name, the tagline, and, when `site.panels`, "Sign in" (→ me.html) and "Admin" (→ admin.html) links.
+6. **Footer** (`<footer>`, replaces the old "How it works" section):
+   - "How we pick jobs": two or three plain sentences: openings come from companies' own career pages and from Adzuna; only posts in India that are open to freshers are kept (internships, apprenticeships, under 1 year of experience, or freshers invited); the list refreshes every morning and evening; every card says why it is there;
+   - the "Jobs by Adzuna" attribution, linking to https://www.adzuna.in;
+   - the removal contact: `site.contact` if set, else "Open an issue" on `site.repoUrl`;
+   - when `site.panels`: a small "Admin" link (→ admin.html).
+7. **Header.** The name, the tagline, and, when `site.panels`, a "Sign in" link (→ me.html).
 
 ## User panel (me.html)
 
@@ -164,7 +163,13 @@ Sign-in is email and password, with no email confirmation.
 ## Admin panel (admin.html)
 
 - Sign-in form. After sign-in, call `is_admin()`. If it is false, show "This account is not an admin" and nothing else.
-- **Dashboard:** the top-strip numbers, the funnel, the sources with boards OK/failed, the runs table, and `admin_stats()` counts.
+- **Dashboard:** four figures (posts, last refresh, accuracy "role+city both right: 42/50", cost per 1,000 posts shown); each opens the Quality & runs tab at its section. A "Run now" link to the workflow, and the `admin_stats()` counts.
+- **Quality & runs:**
+  - the pipeline in 6 short lines;
+  - `#funnel`: a table, total and per source;
+  - `#sources`: name, docs and terms links, why it is allowed, attribution, boards OK/failed;
+  - `#accuracy`: who labelled the 50-post check and its limits (`metrics.labelling`), the metrics with intervals as "92% (81–97%)", the model and prompt version, "as of run X", and the cost per 1,000 posts;
+  - `#runs`: the last 14 runs, with time in IST, scheduled or manual, shown, new and cost; a red mark for failed runs with their `blockedReason`.
 - **Review queue:** the items of `review.json`, with LLM cities and rule cities side by side. Each item has three actions:
   - Hide post → `hidden_posts`;
   - Block company → `blocked_companies`;

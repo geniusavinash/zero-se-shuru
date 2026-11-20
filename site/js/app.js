@@ -1,5 +1,5 @@
 import { $, BATCH, PANEL_CONFIG, TYPES, adzuna, card, corrected, corrections, count, debounce,
-  evidence, isStale, keysOf, options, report, result, rows, searcher, snapshot, strip, taxonomy } from './common.js';
+  isStale, keysOf, options, publicStrip, removalContact, report, result, rows, searcher, snapshot, taxonomy } from './common.js';
 
 const fields = ['q', 'role', 'city', 'type', 'source', 'recent', 'remote'];
 const check = new Set(['recent', 'remote']);
@@ -125,13 +125,13 @@ async function start() {
   }
   if (meta?.site?.tagline) $('tagline').textContent = meta.site.tagline;
   const drawStrip = () => {
-    strip($('strip'), meta, available ? jobs.length : null);
+    publicStrip($('strip'), meta, available ? jobs : null);
     $('stale').hidden = !isStale(meta);
-    $('stale').textContent = $('stale').hidden ? '' : 'This list is older than expected. Check the run history and confirm availability before applying.';
+    $('stale').textContent = $('stale').hidden ? '' : "This list is older than expected. Confirm the opening on the company's page before applying.";
   };
   drawStrip();
   setInterval(drawStrip, 60000);
-  evidence($('evidence'), meta, tax);
+  $('removal-contact').replaceChildren(removalContact(meta));
   render();
 
   const changed = () => {
@@ -174,6 +174,7 @@ async function start() {
       render(false);
     }
     $('panel-links').hidden = false;
+    $('admin-link').hidden = false;
   } catch {
     // A failed connection never prevents browsing the local snapshot.
   }

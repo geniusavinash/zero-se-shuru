@@ -30,7 +30,7 @@ Next round: a 30-minute call where the founder asks for a live change to the cod
 | M4 | Duplicates are removed, and the page says how many. | The number on the page. |
 | M5 | The LLM tags every shown post with one role and its cities, and the model and prompt version are stored for each post. | Role and cities on every card; the tag cache. |
 | M6 | Search, plus filters for role, city and job type. | Try them on a phone. |
-| M7 | A scheduled GitHub Actions run refreshes the page every day with no human. The page shows the last refresh time and the run history, and warns when the data is more than 30 hours old. | Actions history and the page. |
+| M7 | A scheduled GitHub Actions run refreshes the page every day with no human. The page shows the last refresh time and warns when the data is more than 30 hours old. The run history is in the Actions tab and the admin panel's Quality & runs tab (moved from the public page on 2026-11-20, `docs/DECISIONS.md`). | Actions history and the page. |
 | M8 | Every card says "why it's here": the evidence phrase for company posts, the deciding fact for Adzuna posts. | Any card. |
 | M9 | Funnel numbers per source: read → in India → candidates → tagged → eligible → after dedupe → shown. | "How it works" on the page. |
 | M10 | Blind 50-post hand-check, scored by §9. The headline is "role and city both right"; role and city are also scored separately. Each figure has a 95% interval. Also reported: the share that really are fresher posts in India, per source. Every miss is listed. | `eval/report.md` |

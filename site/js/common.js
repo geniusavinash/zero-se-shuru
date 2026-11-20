@@ -263,6 +263,34 @@ export function strip(host, meta, shown) {
   }));
 }
 
+export function publicStrip(host, meta, jobs) {
+  const companies = jobs == null ? meta?.counts?.companies : new Set(jobs.map(job => job.companyKey)).size;
+  const age = relative(meta?.generatedAt);
+  const stats = [
+    ['Openings', count(jobs?.length)],
+    ['Companies hiring', count(companies)],
+    ['Updated', [ist(meta?.generatedAt, true), age ? h('small', age) : null]]
+  ];
+  host.replaceChildren(...stats.map(([title, value]) =>
+    h('div', [h('span', title, 'eyebrow'), h('strong', value)], 'stat')));
+}
+
+export function removalContact(meta) {
+  const contact = meta?.site?.contact;
+  const repoUrl = secureUrl(meta?.site?.repoUrl);
+  const request = ' with the listing title, company and reason.';
+  const prefix = 'Want a listing removed? ';
+  if (contact) return h('p', [prefix, 'Email ', h('strong', contact), request]);
+  if (repoUrl) {
+    const issue = new URL(repoUrl);
+    issue.pathname = `${issue.pathname.replace(/\/+$/, '')}/issues/new`;
+    issue.search = '';
+    issue.hash = '';
+    return h('p', [prefix, link('Open an issue', issue.href), request]);
+  }
+  return h('p', `${prefix}The removal contact is unavailable.`);
+}
+
 function section(id, title, children) {
   const node = h('section', [h('h3', title), ...children], 'evidence-section');
   node.id = id;
@@ -293,8 +321,9 @@ export function evidence(host, meta, tax, admin = false) {
   const aiLabels = labelling?.byHand === false;
   const metricContent = metrics ? [
     h('p', `As of run ${metrics.asOfRun} · Model: ${metrics.model} · Prompt: ${metrics.promptVersion}`),
-    ...(labelling ? [h('p', `Labels: ${labelling.labeller}${aiLabels ? ', not by hand' : ''}${labelling.ownerReviewed > 0 ? `; the owner reviewed ${labelling.ownerReviewed} of the 50` : ''}. ${(labelling.limits ?? []).slice(1).join(' ')}`)] : []),
-    table(aiLabels ? '50-post check with AI labels (95% intervals)' : 'Hand-check results (95% intervals)', ['Measure', 'Result'], [
+    ...(labelling ? [h('p', `Labels: ${labelling.labeller}${aiLabels ? ', not by hand' : ''}${labelling.ownerReviewed > 0 ? `; the owner reviewed ${labelling.ownerReviewed} of the 50` : ''}. ${(labelling.limits ?? []).slice(aiLabels ? 1 : 0).join(' ')}`)] : []),
+    table(aiLabels ? '50-post check with AI labels (95% intervals)' : labelling?.byHand === true
+      ? 'Hand-check results (95% intervals)' : '50-post check (95% intervals)', ['Measure', 'Result'], [
       ['Role and city both right', interval(metrics.accuracy?.both)], ['Role', interval(metrics.accuracy?.role)],
       ['City', interval(metrics.accuracy?.city)], ...Object.entries(metrics.fresherShareBySource ?? {})
         .map(([id, value]) => [`Fresher and in India: ${tax.sourceName(id)}`, interval(value)])
@@ -309,11 +338,6 @@ export function evidence(host, meta, tax, admin = false) {
     runs.map(run => [run.id, ist(run.startedAt, true), triggers[run.trigger] ?? pretty(run.trigger),
       run.ok ? 'Succeeded' : h('strong', `Failed${run.blockedReason ? `: ${run.blockedReason}` : ''}`, 'error'),
       count(run.shown), count(run.newPosts), count(run.llmCalls), dollars(run.costUsd)]), i => runs[i].ok ? '' : 'failed')]));
-  const repoUrl = meta?.site?.repoUrl ? String(meta.site.repoUrl).replace(/\/+$/, '') : '';
-  if (!admin) blocks.push(section('contact', 'Request a removal', [h('p', meta?.site?.contact
-    ? ['Email ', h('strong', meta.site.contact), ' with the listing title, company and reason.']
-    : repoUrl ? [link('Open an issue', `${repoUrl}/issues/new`), ' with the listing title, company and reason.']
-      : 'The removal contact is unavailable.') ]));
   host.replaceChildren(...blocks);
 }
 
