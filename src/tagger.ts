@@ -186,7 +186,10 @@ export async function tagAll(jobs: Job[], cfg: Config, llm: Llm, opts: TagRunOpt
           const parsed = schema.safeParse(r.json);
           if (parsed.success) {
             tags.set(item.job.key, parsed.data);
-            appendFileSync(CACHE_PATH, `${JSON.stringify({ hash: item.hash, model: cfg.model.model_id, promptVersion: cfg.model.prompt_version, at: new Date().toISOString(), tags: parsed.data } satisfies TagRecord)}\n`);
+            // The cache is committed to git, and no Adzuna post text goes into git (REQUIREMENTS): an Adzuna
+            // post's evidence phrase is not stored. Its card shows the deciding fact, never the phrase.
+            const stored = item.job.aggregator ? { ...parsed.data, evidence: '' } : parsed.data;
+            appendFileSync(CACHE_PATH, `${JSON.stringify({ hash: item.hash, model: cfg.model.model_id, promptVersion: cfg.model.prompt_version, at: new Date().toISOString(), tags: stored } satisfies TagRecord)}\n`);
             break;
           }
           outcome = 'invalid answer';

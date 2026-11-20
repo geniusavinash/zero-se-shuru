@@ -209,10 +209,10 @@ The public page is the product a student uses; the evidence lives in the admin p
 | `blocked_companies` (company_key, …) | anyone | admins |
 | `tag_fixes` (job_key, role, cities[], …) | anyone | admins |
 | `board_switches` (ats, token, on, …) | anyone | admins |
-| `admins` (email) | nobody directly, only through `is_admin()` | nobody directly |
+| `admins` (user_id) | nobody directly, only through `is_admin()` | nobody directly |
 
 Helper functions:
-- `is_admin()`: a security-definer function that checks `auth.jwt()->>'email'` against `admins`.
+- `is_admin()`: a security-definer function that checks `auth.uid()` against `admins`. (The first design checked the email; the first security review showed that sign-up does not prove email ownership, so admins are keyed by user id. `db/schema.sql` is the shipped version.)
 - `admin_stats()`: returns counts only (users, saves by status), and only when `is_admin()` is true.
 
 ### User panel (`me.html`)

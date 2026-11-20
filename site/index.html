@@ -40,13 +40,13 @@
           <div class="query-field">
             <label class="sr-only" for="q">Search</label>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
-            <input id="q" name="q" type="search" placeholder="Job title, skill, company or city">
+            <input id="q" name="q" type="search" placeholder="Job title, role, company or city">
           </div>
           <label class="sr-only" for="city">City or metro</label>
           <select id="city" name="city"><option value="">All cities</option></select>
           <button type="submit" class="primary search-submit">Search jobs</button>
         </form>
-        <div class="popular"><span id="popular-label">Popular:</span><div id="popular" class="popular-chips" role="group" aria-labelledby="popular-label"></div></div>
+        <div class="popular"><span id="popular-label">Most openings:</span><div id="popular" class="popular-chips" role="group" aria-labelledby="popular-label"></div></div>
         <p id="freshness" class="freshness muted">Checking last update…</p>
         <p id="stale" class="notice" hidden></p>
         <p id="data-errors" class="error" role="status"></p>
@@ -60,7 +60,7 @@
     <ul class="value-strip" aria-label="What to expect">
       <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-6 7v6c3 3 9 3 12 0v-6m4-2v7"/></svg><div><strong>Only fresher roles</strong><p>Internships, apprenticeships and jobs asking under 1 year.</p></div></li>
       <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M6 21V5l12-2v18M9 8h1m4 0h1M9 12h1m4 0h1m-4 8v-4h2v4"/></svg><div><strong>Straight from the source</strong><p>Companies' own career pages and the Adzuna API.</p></div></li>
-      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 16a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8 9h8m-8 4h5"/></svg><div><strong>Every card says why</strong><p>The line in the post that makes it fit.</p></div></li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 16a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8 9h8m-8 4h5"/></svg><div><strong>Every card says why</strong><p>The reason each post qualified.</p></div></li>
       <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4v5h-5M4 20v-5h5m-5 0a8 8 0 0 0 14 3M20 9A8 8 0 0 0 6 6"/></svg><div><strong>Fresh twice a day</strong><p>Refreshed at 6:07 am and 7:07 pm IST, on its own.</p></div></li>
     </ul>
 
@@ -96,7 +96,7 @@
           </li>
           <li>
             <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM11 13 22 2"/></svg></span>
-            <div><h3>3. You apply</h3><p>On the company's own page.<span id="how-account" hidden> Sign in to save jobs and track where you applied.</span></p></div>
+            <div><h3>3. You apply</h3><p>On the source listing: the company's own page or Adzuna.<span id="how-account" hidden> Sign in to save jobs and track where you applied.</span></p></div>
           </li>
         </ol>
         <aside class="how-cta">

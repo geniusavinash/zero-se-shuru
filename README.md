@@ -7,7 +7,7 @@ Real fresher jobs and internships in India, collected every day from companies' 
 ## What it does
 
 1. **Collect.**
-   - 175 company job boards: Greenhouse, Lever and Ashby, read through their documented public APIs.
+   - 179 company job boards (119 Greenhouse, 40 Lever, 20 Ashby in the latest run), read through their documented public APIs.
    - The Adzuna India API, used with a key and its required label.
    - No scraping, and none of the sites whose terms forbid automated collection (Naukri, Internshala, LinkedIn, Indeed).
 2. **Screen with free rules.** Keep India only, drop senior titles, drop junk, apply an age limit.
@@ -38,7 +38,7 @@ Measured run `2026-11-20T10-19-01Z-local`, gpt-6-luna, prompt v1. 50 posts drawn
 **Who labelled: an AI, not a hand check.** The 50 labels were made by Claude Opus 5.5, not by hand (`eval/labelling.json`). It is a different model family from the tagger, but the same AI session wrote the tagging prompt and the guideline. For the 10 company-board posts it read the full post text from the board's API. For the 40 Adzuna posts it read only the API snippet (up to 500 characters), the same text the tagger saw, because adzuna.in refuses automated requests. So these figures check how well the tagger read the text it was given, not facts that appear only in the full Adzuna page.
 
 **What the misses show** (8 posts with 5 city errors and 5 role errors, all listed in `eval/report.md`):
-- City: three are remote posts that also name a place ("Hyderabad, India (Remote)"). The tagger keeps the place; the guideline says remote means no city. This is the clearest thing to fix next, in code, without a new LLM call.
+- City: three are remote posts that also name a place ("Hyderabad, India (Remote)"). This is a conflict in my own rules, not a model error: the tagging prompt says a remote post keeps its named city, and the labelling guideline says remote means no city. The tagger followed its prompt. The guideline was frozen before labelling, so the figures above stand; by the prompt's rule, city would be 48/50 and both 44/50. Next: one rule in both places (keeping the city helps a student who wants to live near the office).
 - City: one post had only "India" in its location and "Gurgaon" in the text; the guideline takes the city from the text, the tagger left it empty. One location read "Noida, Ghaziabad", where Ghaziabad is only the parent area in Adzuna's data; the tagger kept both.
 - Role: a "NetSuite Technical Intern" was tagged other instead of software development. The other four are calls between two close roles: AR calling (finance or operations), a Deals internship (finance or other), oil and gas title work (legal or other), search-engine rating (data/AI or other). The labeller flagged two of these as ambiguous in its notes before scoring.
 
@@ -54,7 +54,7 @@ Measured run `2026-11-20T10-19-01Z-local`, gpt-6-luna, prompt v1. 50 posts drawn
 Needs Node 22 or newer. Keys are environment variables; `.env.example` lists them.
 
 ```
-npm ci
+npm install   # not npm ci: the lockfile was written on Windows and lacks two Linux-only optional packages
 npm test
 npm run refresh -- --no-llm   # collect and count only
 npm run refresh               # full run: builds site/data/

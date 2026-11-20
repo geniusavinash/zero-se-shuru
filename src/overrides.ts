@@ -10,6 +10,8 @@ export interface Overrides {
   tagFixes: Map<string, { role?: string; cities?: string[] }>;
   boardSwitches: Map<string, boolean>;
   note?: string;
+  /** Supabase is configured but did not answer: the moderation state is unknown, so the run must not publish. */
+  failed?: boolean;
 }
 
 const empty = (note?: string): Overrides => ({ hidden: new Set(), blocked: new Set(), tagFixes: new Map(), boardSwitches: new Map(), note });
@@ -42,6 +44,8 @@ export async function loadOverrides(): Promise<Overrides> {
       boardSwitches: new Map(switches.map((r) => [`${String(r.ats)}:${String(r.token)}`, r.is_on === true])),
     };
   } catch (err) {
-    return empty(`Supabase overrides not read (${err instanceof Error ? err.message : 'error'}); run continues without them`);
+    // Review fix (round 3): going on without them would bring back posts the admin hid. The build blocks
+    // publication instead, so yesterday's page stays.
+    return { ...empty(`Supabase overrides not read (${err instanceof Error ? err.message : 'error'}); this run will not publish`), failed: true };
   }
 }

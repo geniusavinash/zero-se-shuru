@@ -150,8 +150,10 @@ function drawDiscovery() {
   ];
   $('popular').replaceChildren(...(chips.length ? chips : [h('span', 'No suggestions available.', 'muted')]));
 
+  // Company-board posts only: an Adzuna listing must carry its "Jobs by Adzuna" badge, which this compact
+  // link card has no room for (review fix, round 3). Adzuna posts keep their badge in the list below.
   const recent = jobs.map(job => ({ job, seen: Date.parse(job.firstSeen) }))
-    .filter(({ job, seen }) => Number.isFinite(seen) && secureUrl(job.url))
+    .filter(({ job, seen }) => Number.isFinite(seen) && secureUrl(job.url) && !adzuna(job))
     .sort((a, b) => b.seen - a.seen).slice(0, 3);
   $('just-list').replaceChildren(...(recent.length ? recent.map(({ job }) => {
     const cityId = job.cities?.[0];

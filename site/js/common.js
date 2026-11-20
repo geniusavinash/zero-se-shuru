@@ -290,7 +290,7 @@ export function strip(host, meta, shown) {
   const stats = [
     ['funnel', 'Posts available', count(shown)],
     ['runs', 'Last refresh', [ist(meta?.generatedAt, true), relative(meta?.generatedAt) ? h('small', relative(meta.generatedAt)) : null]],
-    ['accuracy', 'Tagging accuracy', both?.total > 0 ? `Role+city both right: ${both.correct}/${both.total}` : 'Not measured yet'],
+    ['accuracy', meta?.metrics?.labelling?.byHand === false ? 'Tagging accuracy (AI labels)' : 'Tagging accuracy', both?.total > 0 ? `Role+city both right: ${both.correct}/${both.total}` : 'Not measured yet'],
     ['accuracy', 'Cost per 1,000 posts shown', dollars(meta?.metrics?.costPer1000Shown)]
   ];
   host.replaceChildren(...stats.map(([id, title, value]) => {

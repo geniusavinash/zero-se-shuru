@@ -21,6 +21,7 @@ My prompts to Claude Code, word for word in Hinglish, oldest first, with an Engl
 | 11 | "labeling ME NAHI SAMJHA / TUM APNA KAM 100% COMPLETE KRKE BATAO" | I didn't follow the labelling; finish the work yourself and report back. | Claude Code labelled the 50-post check, and every figure is marked "AI labels, not by hand" (`eval/labelling.json`). |
 | 12 | "ye mujhe as ye production project ki trah dikhana h / Accuracy and cost / Recent runs / ye sab yek alga admin ke under tab bna kr - hm apne detail me ye sab dikha denge" | I want this to look like a production project. Put Accuracy and cost, Recent runs and the rest in a separate admin tab; we will show them in our own write-up. | The public page became the product (jobs, last updated, a footer); the evidence moved to the admin panel's "Quality & runs" tab (gpt-6.2-sol, `tasks/production.md`). |
 | 13 | "dekho design hm kuchh yesha kr sabkte h ye sample banaya hu jo dekhne me bhi achha rahega / tum batao - fully responsive" (with a mockup image) | Look, we could do the design like this sample I made; it will look good. Tell me. Fully responsive. | A redesign in the mockup's style (gpt-6.2-sol, `tasks/redesign.md`), keeping only true content: real numbers instead of the mockup's sample figures, no salaries, logos, photo or support claims; a privacy page; checked from 360 px to 1440 px. |
+| 14 | "live kar do / or admin user -landing - all- astra se very krwa lo kahi kuchh kami to nahi h or sorce me - ushki video me ushne kya bola tha email me kya aaya sabke according socho phir dekho hmne complete kr liya h ya kuchh missing h hm shortlist ho jayega samjhe / ye sab astra se krwayo or tum khud rreview krke final batao" | Make it live. Have astra check the admin panel, user panel and landing page for gaps; judge us against what the founder said in his video and his email; are we complete, will we be shortlisted? Have astra do it, then review it yourself and give the final answer. | The redesign went live; a third independent review (gpt-6.2-astra) against the brief and the founder's words; Claude Code verified each finding in the code and fixed the real ones the same evening. |
 
 ## 2. Tools
 
@@ -37,6 +38,10 @@ Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it coul
 
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
+
+### Third review (gpt-6.2-astra, with images), 2026-11-20 17:45 IST
+
+`tasks/review-3.md`, sent with the brief (the candidate's personal details removed), a summary of the founder's public hiring reel, the docs, the code and nine screenshots of the live site. It asked for the brief line by line, a review of the landing page and both panels, the founder's likely reaction and live-change requests, and a verdict. 165 s, about $1.24. Claude Code checked every finding in the code before acting: the real ones were fixed (`docs/BUILD_LOG.md`), and one claim in our own write-up was corrected (the remote-city misses come from a prompt-guideline conflict, not a model error).
 
 ### Redesign from the owner's mockup (gpt-6.2-sol, with images), 2026-11-20 17:40 IST
 

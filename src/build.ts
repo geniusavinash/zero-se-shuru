@@ -149,16 +149,10 @@ export function build(input: BuildInput): { record: RunRecord; shown: number; re
     reasons[d.reason] = (reasons[d.reason] ?? 0) + 1;
     // A post the admin hid or blocked never reaches the published review file (review fix).
     if (d.reason === 'hidden' || d.reason === 'blocked') continue;
-    // The ad that triggered a scam hold is listed too, so the admin sees the evidence, not only its siblings
-    // (review fix, round 2). review.json holds only public post data.
-    if (t?.genuine === 'pay_or_scam') {
-      review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: 'scam_flagged', role: t.role, llmCities: t.cities, ruleCities: c.loc.cities });
-    }
-    // Held back with its employer: listed in the review queue so the admin can check it.
-    if (d.reason === 'scam_company' && t) {
-      review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: 'scam_company', role: t.role, llmCities: t.cities, ruleCities: c.loc.cities });
-      continue;
-    }
+    // Scam flags are not listed: review.json is a public file, and naming an employer on an unverified model
+    // flag is not fair to it (review fix, round 3). The run record keeps the counts (not_genuine,
+    // scam_company); a private, admin-only queue for them is the next step.
+    if (d.reason === 'scam_company') continue;
     if (!t) {
       const why = input.failed.get(job.key);
       if (why) review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: why === 'refused' ? 'refused' : why === 'incomplete' ? 'incomplete' : 'untagged', llmCities: [], ruleCities: c.loc.cities });
@@ -227,13 +221,20 @@ export function build(input: BuildInput): { record: RunRecord; shown: number; re
     };
   };
 
+  // A run publishes only with enough posts and a known moderation state (review fix, round 3).
+  const blockedReason =
+    shownRows.length < cfg.site.min_shown
+      ? `only ${shownRows.length} posts would be shown (minimum ${cfg.site.min_shown})`
+      : overrides.failed
+        ? 'the admin overrides could not be read, so hidden posts could come back'
+        : undefined;
   const record: RunRecord = {
     id: input.runId,
     startedAt: input.startedAt.toISOString(),
     finishedAt: new Date().toISOString(),
     trigger: input.trigger,
-    ok: shownRows.length >= cfg.site.min_shown,
-    blockedReason: shownRows.length >= cfg.site.min_shown ? undefined : `only ${shownRows.length} posts would be shown (minimum ${cfg.site.min_shown})`,
+    ok: blockedReason === undefined,
+    blockedReason,
     newPosts: shownRows.filter((r) => r.isNew).length,
     model: cfg.model.model_id,
     promptVersion: cfg.model.prompt_version,
