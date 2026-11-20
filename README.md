@@ -14,7 +14,7 @@ Real fresher jobs and internships in India, collected every day from companies' 
 3. **Tag with an LLM.** gpt-6-luna on Azure OpenAI, one call per post, with a strict JSON schema. It reports role, cities, minimum experience, whether freshers are invited, job type and whether the post is genuine. Answers are cached, so unchanged posts are free on later runs.
 4. **Decide in code.** A post is shown only if it is genuine, in India, and an internship or apprenticeship, or asks under 1 year, or explicitly invites freshers.
 5. **Remove duplicates.** The same opening in several cities becomes one card. A company-board post beats its Adzuna copy.
-6. **Publish.** GitHub Actions runs it at 06:07 and 19:07 IST, commits the run record, and deploys the static page to Cloudflare Pages.
+6. **Publish.** GitHub Actions is scheduled to run it at 06:07 and 19:07 IST; it commits the run record and deploys the static page to Cloudflare Pages. Up to the deadline GitHub had not fired a single scheduled run, so every run so far was started by hand (see `docs/BUILD_LOG.md`).
 
 Every card says *why it's here*. The public page is the product: search, filters, the cards, and when the list was last updated. The evidence (the funnel, the sources with their terms, the accuracy and cost, and the last 14 runs) is in the admin panel's **Quality & runs** tab, and its numbers are below and in the sheet.
 
@@ -33,7 +33,7 @@ Measured run `2026-11-20T10-19-01Z-local`, gpt-6-luna, prompt v1. 50 posts drawn
 | Really a fresher post in India: company boards (Greenhouse, Lever) | 10/10 (Greenhouse 7/7, 65–100%; Lever 3/3, 44–100%) |
 | Cost per 1,000 posts tagged | $0.12 ($0.2012 for 1,713 posts, 1,753 calls, from an empty cache) |
 | Cost per 1,000 posts shown | $0.68 |
-| Next scheduled run | 2 new calls, $0.0002: unchanged posts are not tagged again |
+| Next run (started by hand) | 2 new calls, $0.0002: unchanged posts are not tagged again |
 
 **Who labelled: an AI, not a hand check.** The 50 labels were made by Claude Opus 5.5, not by hand (`eval/labelling.json`). It is a different model family from the tagger, but the same AI session wrote the tagging prompt and the guideline. For the 10 company-board posts it read the full post text from the board's API. For the 40 Adzuna posts it read only the API snippet (up to 500 characters), the same text the tagger saw, because adzuna.in refuses automated requests. So these figures check how well the tagger read the text it was given, not facts that appear only in the full Adzuna page.
 
