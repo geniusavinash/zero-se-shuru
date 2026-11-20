@@ -30,6 +30,7 @@ const about: Sheet = {
     ['live page URL', meta.site.publicUrl],
     ['repo URL', meta.site.repoUrl],
     ['measured run id', sample?.runId || meta.runId],
+    ['posts tab', 'The posts this build of the page shows; the live page refreshes twice a day, so its list can differ slightly.'],
     ['generated time', meta.generatedAt],
   ],
 };
@@ -56,17 +57,28 @@ for (const { name, file, description } of csvTabs) {
 }
 
 const docs = read('docs/PROMPTS.md');
+/** The rows of a section's markdown tables that have `width` cells, with `code` marks and escaped pipes removed. */
+function mdTable(section: string, width: number): string[][] {
+  return section.split(/\r?\n/).flatMap((line) => {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith('|')) return [];
+    const cells = trimmed.replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map((cell) =>
+      cell.trim().replace(/\\\|/g, '|').replace(/`([^`]+)`/g, '$1'),
+    );
+    return cells.length === width && !cells.every((cell) => /^:?-+:?$/.test(cell)) ? [cells] : [];
+  });
+}
+
+// Part 1: the owner's own prompts to Claude Code, word for word ("the prompts used" includes how the AI was steered).
+const mySection = docs.split(/^##\s+1\.[^\r\n]*\r?\n/m)[1]?.split(/^##\s+/m)[0];
+if (!mySection) throw new Error('Missing the owner prompts section (## 1.) in docs/PROMPTS.md');
+const [myHeaders, ...myRows] = mdTable(mySection, 4);
+if (!myHeaders || myRows.length === 0) throw new Error('Missing the owner prompts table in docs/PROMPTS.md');
+sheets.push({ name: 'My prompts', description: "The owner's own prompts to Claude Code, word for word, with an English gloss and what each changed.", headers: myHeaders, rows: myRows, wrapColumn: myHeaders[1] });
+
 const toolsSection = docs.split(/^##\s+2\.\s+Tools[^\S\r\n]*\r?\n/m)[1]?.split(/^##\s+/m)[0];
 if (!toolsSection) throw new Error('Missing the Tools section in docs/PROMPTS.md');
-const toolTable = toolsSection.split(/\r?\n/).flatMap((line) => {
-  const trimmed = line.trim();
-  if (!trimmed.startsWith('|')) return [];
-  const cells = trimmed.replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map((cell) =>
-    cell.trim().replace(/\\\|/g, '|').replace(/`([^`]+)`/g, '$1'),
-  );
-  return cells.length === 3 && !cells.every((cell) => /^:?-+:?$/.test(cell)) ? [cells] : [];
-});
-const [toolHeaders, ...toolRows] = toolTable;
+const [toolHeaders, ...toolRows] = mdTable(toolsSection, 3);
 if (!toolHeaders) throw new Error('Missing the AI tools table in docs/PROMPTS.md');
 sheets.push({ name: 'AI tools', description: 'AI tools, models and what they were used for.', headers: toolHeaders, rows: toolRows });
 
