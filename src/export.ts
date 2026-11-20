@@ -3,7 +3,7 @@
  * posts, hand-check 50, numbers, sources, runs. Adzuna rows carry the "Jobs by Adzuna" attribution.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { csvCell, LABELS, PREDICTIONS, readCsv } from './eval/common.ts';
+import { csvCell, LABELS, PREDICTIONS, PRIVATE_LABELS, readCsv } from './eval/common.ts';
 import type { Row } from './types.ts';
 
 const out = '.cache/exports';
@@ -29,12 +29,14 @@ write('posts', ['title', 'company', 'role', 'cities', 'job_type', 'posted', 'fir
 if (existsSync(LABELS) && existsSync(PREDICTIONS)) {
   const pred = JSON.parse(readFileSync(PREDICTIONS, 'utf8')) as Record<string, { role: string; cities: string[]; source: string }>;
   const byKey = new Map(jobs.map((r) => [r.key, r]));
+  // A sampled post that is no longer listed today keeps its title and link from the local labelling sheet.
+  const sheetRows = existsSync(PRIVATE_LABELS) ? new Map(readCsv(PRIVATE_LABELS).map((r) => [r.key ?? '', r])) : new Map<string, Record<string, string>>();
   write('handcheck_50', ['key', 'source', 'title', 'link', 'shown_role', 'label_role', 'role_ok', 'shown_cities', 'label_cities', 'cities_ok', 'fresher_in_india'], readCsv(LABELS).map((l) => {
     const p = pred[l.key ?? ''];
     const r = byKey.get(l.key ?? '');
     const shownCities = [...(p?.cities ?? [])].sort().join('; ');
     const labelCities = (l.label_cities ?? '').split(';').filter(Boolean).sort().join('; ');
-    return [l.key, p?.source, r?.title, r?.url, p?.role, l.label_role, p?.role === l.label_role ? 'yes' : 'no', shownCities, labelCities, shownCities === labelCities ? 'yes' : 'no', l.label_fresher_india];
+    return [l.key, p?.source, r?.title ?? sheetRows.get(l.key ?? '')?.title, r?.url ?? sheetRows.get(l.key ?? '')?.link, p?.role, l.label_role, p?.role === l.label_role ? 'yes' : 'no', shownCities, labelCities, shownCities === labelCities ? 'yes' : 'no', l.label_fresher_india];
   }));
 }
 
