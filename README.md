@@ -2,7 +2,7 @@
 
 Real fresher jobs and internships in India, collected every day from companies' own job boards and the Adzuna API, tagged by an LLM with a role and cities, and checked against a strict "open to freshers" rule.
 
-**Live page:** _(link after deploy)_ · **Run history:** the Actions tab of this repo, and "Recent runs" on the page.
+**Live page:** https://zero-se-shuru.pages.dev · **Run history:** the Actions tab of this repo, and "Recent runs" on the page.
 
 ## What it does
 

@@ -10,3 +10,6 @@ _(Avinash: rewrite the "why" of each entry in your own words before submitting.)
 | 2026-11-20 | Keep the repo inside the `myskill` folder | `C:\dev\zero-se-shuru` | One place for everything; the junctions keep the packages off the cloud | Yes. Claude Code suggested `C:\dev` |
 | 2026-11-20 | Tag with gpt-6-luna on Azure OpenAI | Claude Haiku 5.5 | Same price class, paid from the existing Azure credit, no new account | Partly. Claude Code proposed Haiku first |
 | 2026-11-20 | Use Claude Code plus Codex (GPT-6.x) together | One tool only | Parallel front-end work, and an independent reviewer | Yes. This was my idea |
+| 2026-11-20 | Keep Supabase for login and data | Self-hosting on my own VPS (8 cores, 32 GB) | Nothing to keep alive while the page is being evaluated; login and row-level security come ready-made; the VPS stays an option for later | No. I questioned it; Claude Code recommended Supabase and I agreed |
+| 2026-11-20 | Move more of the coding to the GPT models | Claude Code writing everything | Use the Azure credit and run work in parallel; Claude Code reviews and tests every file | Yes. My request |
+| 2026-11-20 | A second design pass, from screenshots | Shipping the first design | The page is judged in seconds, often on a phone | Yes. My request |

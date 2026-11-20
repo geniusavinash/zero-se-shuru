@@ -56,4 +56,7 @@ write('sources', ['source', 'docs', 'terms', 'why_allowed', 'attribution', 'boar
   return [s.display, s.docs, s.terms, s.whyAllowed, s.attribution, s.boardsOk, s.boardsFailed, f.read, f.india, f.candidates, f.tagged, f.eligible, f.shown];
 }));
 
-write('runs', ['run', 'started_utc', 'trigger', 'ok', 'shown', 'llm_calls', 'cost_usd', 'blocked_reason'], meta.runs.map((r) => [r.id, r.startedAt, r.trigger, r.ok ? 'yes' : 'no', r.shown, r.llmCalls, r.costUsd, r.blockedReason]));
+// Every run, including the scheduled ones on GitHub Actions: data/runs.json is the committed history
+// (the page's meta.json only knows the runs up to the build it came from).
+const runs = existsSync('data/runs.json') ? (JSON.parse(readFileSync('data/runs.json', 'utf8')) as typeof meta.runs) : meta.runs;
+write('runs', ['run', 'started_utc', 'trigger', 'ok', 'shown', 'llm_calls', 'cost_usd', 'blocked_reason'], runs.map((r) => [r.id, r.startedAt, r.trigger, r.ok ? 'yes' : 'no', r.shown, r.llmCalls, r.costUsd, r.blockedReason]));
