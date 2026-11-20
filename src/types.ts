@@ -72,6 +72,7 @@ export type DecisionReason =
   | 'blocked'
   | 'untagged'
   | 'not_genuine'
+  | 'scam_company'
   | 'not_india'
   | 'job_type_other'
   | 'internship'

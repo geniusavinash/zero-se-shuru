@@ -39,6 +39,12 @@ describe('decide', () => {
     expect(decide({}, 1).reason).toBe('untagged');
   });
 
+  it('holds back a genuine-looking post when its employer had a scam ad in the run', () => {
+    expect(decide({ tags: tags({ job_type: 'internship' }), scamCompany: true }, 1)).toEqual({ shown: false, reason: 'scam_company' });
+    // The post's own verdict comes first.
+    expect(decide({ tags: tags({ genuine: 'pay_or_scam' }), scamCompany: true }, 1).reason).toBe('not_genuine');
+  });
+
   it('never shows Adzuna text as the reason, only the deciding fact', () => {
     const t = tags({ job_type: 'internship', evidence: 'copied from the ad' });
     expect(whyText(t, { shown: true, reason: 'internship' }, true)).toBe('internship');

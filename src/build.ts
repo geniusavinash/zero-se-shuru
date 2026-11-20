@@ -92,15 +92,32 @@ export function build(input: BuildInput): { record: RunRecord; shown: number; re
   const rows: Row[] = [];
   let cityMismatch = 0;
 
+  // Employers with any post the LLM called a fee or scam ad in this run. An unnamed employer is never
+  // grouped: "Unknown employer" posts are judged one by one.
+  const scamCompanies = new Set(
+    candidates
+      .filter((c) => tags.get(c.job.key)?.genuine === 'pay_or_scam' && c.job.company !== 'Unknown employer')
+      .map((c) => companyKey(c.job.company))
+      .filter((k) => k !== ''),
+  );
+
   for (const c of candidates) {
     const job = c.job;
     firstSeen[job.key] ??= today;
     const t = tags.get(job.key);
     const ck = companyKey(job.company);
-    const d = decide({ tags: t, hidden: overrides.hidden.has(job.key), blocked: overrides.blocked.has(ck) }, cfg.rules.experience_limit_years);
+    const d = decide(
+      { tags: t, hidden: overrides.hidden.has(job.key), blocked: overrides.blocked.has(ck), scamCompany: scamCompanies.has(ck) },
+      cfg.rules.experience_limit_years,
+    );
     reasons[d.reason] = (reasons[d.reason] ?? 0) + 1;
     // A post the admin hid or blocked never reaches the published review file (review fix).
     if (d.reason === 'hidden' || d.reason === 'blocked') continue;
+    // Held back with its employer: listed in the review queue so the admin can check it.
+    if (d.reason === 'scam_company' && t) {
+      review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: 'scam_company', role: t.role, llmCities: t.cities, ruleCities: c.loc.cities });
+      continue;
+    }
     if (!t) {
       const why = input.failed.get(job.key);
       if (why) review.push({ key: job.key, title: job.title, company: job.company, companyKey: ck, source: job.source, url: job.url, reason: why === 'refused' ? 'refused' : why === 'incomplete' ? 'incomplete' : 'untagged', llmCities: [], ruleCities: c.loc.cities });

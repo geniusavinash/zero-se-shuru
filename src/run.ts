@@ -84,7 +84,7 @@ async function main(): Promise<void> {
     log(`collecting from ${only === 'adzuna' ? 0 : cfg.boards.filter((b) => b.on).length} boards${wantAdzuna ? ' and Adzuna' : ''}...`);
     const [boardRead, adz] = await Promise.all([
       only === 'adzuna' ? Promise.resolve({ jobs: [] as Job[], boards: [] as BoardStatus[] }) : collectBoards(cfg, http, { only: only as Board['ats'] | undefined, boardSwitches: overrides.boardSwitches, log }),
-      wantAdzuna ? readAdzuna(http, { appId: appId!, appKey: appKey! }, { log }) : Promise.resolve(undefined),
+      wantAdzuna ? readAdzuna(http, { appId: appId!, appKey: appKey! }, { log, pages: cfg.site.adzuna_pages }) : Promise.resolve(undefined),
     ]);
     jobs = [...boardRead.jobs, ...(adz?.jobs ?? [])];
     boards = boardRead.boards;

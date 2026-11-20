@@ -19,6 +19,9 @@ max_age_days_direct: 180
 max_candidates_per_company: 40
 max_shown_per_company: 20
 max_adzuna_shown: 400
+# Adzuna pages of 50 per query (5 queries). 3 pages gave 439 posts (2026-11-20); 5 pages stays well inside
+# Adzuna's free limits (about 23 calls a run, 2 runs a day, a 3 s gap per call).
+adzuna_pages: 5
 
 # In GitHub Actions a run tags at most this many new posts, and stops tagging after this many minutes.
 actions_max_new_tags: 300

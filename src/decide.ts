@@ -5,12 +5,19 @@
  */
 import type { Decision, Tags } from './types.ts';
 
-export function decide(input: { tags?: Tags; hidden?: boolean; blocked?: boolean }, experienceLimitYears: number): Decision {
+export function decide(
+  input: { tags?: Tags; hidden?: boolean; blocked?: boolean; scamCompany?: boolean },
+  experienceLimitYears: number,
+): Decision {
   if (input.hidden) return { shown: false, reason: 'hidden' };
   if (input.blocked) return { shown: false, reason: 'blocked' };
   const t = input.tags;
   if (!t) return { shown: false, reason: 'untagged' };
   if (t.genuine !== 'ok') return { shown: false, reason: 'not_genuine' };
+  // Another post from the same employer in this run looked like a fee or scam ad. Found in tuning
+  // (2026-11-20): two "airport ground staff, freshers" ads were flagged and a third from the same
+  // employer was shown. Freshers are the usual target of such ads, so the whole employer is held back.
+  if (input.scamCompany) return { shown: false, reason: 'scam_company' };
   if (!t.in_india) return { shown: false, reason: 'not_india' };
   if (t.job_type === 'other') return { shown: false, reason: 'job_type_other' };
   if (t.job_type === 'internship' || t.job_type === 'apprenticeship') return { shown: true, reason: 'internship' };

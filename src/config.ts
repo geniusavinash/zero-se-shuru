@@ -16,6 +16,7 @@ const Site = z.object({
   max_candidates_per_company: z.number().int().positive(),
   max_shown_per_company: z.number().int().positive(),
   max_adzuna_shown: z.number().int().nonnegative(),
+  adzuna_pages: z.number().int().min(1).max(10),
   actions_max_new_tags: z.number().int().positive(),
   actions_max_minutes: z.number().positive(),
   stale_after_hours: z.number().positive(),
