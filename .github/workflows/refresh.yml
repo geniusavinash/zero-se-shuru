@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "37 0 * * *"  # 06:07 IST
     - cron: "37 13 * * *" # 19:07 IST
+    # One-off slots on 20 Nov (22:37 and 23:07 IST): GitHub dropped the first 19:07 slot, so these check
+    # that a schedule-triggered run works before the deadline. Remove after 20 Nov.
+    - cron: "7 17 20 11 *"
+    - cron: "37 17 20 11 *"
   workflow_dispatch:
     inputs:
       dry_run:
