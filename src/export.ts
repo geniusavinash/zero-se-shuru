@@ -42,8 +42,15 @@ if (existsSync('data/metrics.json')) {
   const m = JSON.parse(readFileSync('data/metrics.json', 'utf8')) as Record<string, unknown> & {
     accuracy: Record<string, { correct: number; total: number; low: number; high: number }>;
     fresherShareBySource: Record<string, { correct: number; total: number; low: number; high: number }>;
+    labelling?: { labeller: string; byHand: boolean; ownerReviewed: number; textUsed: string; limits: string[] } | null;
   };
   const rows: (string | number)[][] = [];
+  if (m.labelling) {
+    const l = m.labelling;
+    rows.push(['labelled by', `${l.labeller}${l.byHand ? '' : ', not by hand'}${l.ownerReviewed > 0 ? `; owner reviewed ${l.ownerReviewed} of 50` : ''}`, '']);
+    rows.push(['labelled by: text used', l.textUsed, '']);
+    for (const limit of l.limits) rows.push(['labelled by: limit', limit, '']);
+  }
   for (const [k, v] of Object.entries(m.accuracy)) rows.push([`accuracy: ${k}`, `${v.correct}/${v.total}`, `${Math.round(v.low * 100)}–${Math.round(v.high * 100)}%`]);
   for (const [k, v] of Object.entries(m.fresherShareBySource)) rows.push([`fresher in India: ${k}`, `${v.correct}/${v.total}`, `${Math.round(v.low * 100)}–${Math.round(v.high * 100)}%`]);
   for (const k of ['asOfRun', 'model', 'promptVersion', 'llmCallsInRun', 'postsTaggedInRun', 'costUsdRun', 'costPer1000Tagged', 'costPer1000Shown']) rows.push([k, String(m[k] ?? ''), '']);

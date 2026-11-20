@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { loadConfig } from '../config.ts';
 import { csvCell, PRIVATE_LABELS } from './common.ts';
 
@@ -115,6 +115,12 @@ function save(res: ServerResponse, input: unknown) {
     writeFileSync(`${path}.tmp`, `\uFEFF${[sheet.header, ...lines].join('\n')}\n`, 'utf8');
     renameSync(`${path}.tmp`, path);
   } catch {
+    // Review fix: do not leave a stale temp file behind when the rename fails (Excel holding the CSV).
+    try {
+      rmSync(`${path}.tmp`, { force: true });
+    } catch {
+      // Best effort: the 409 below is the answer either way.
+    }
     return json(res, 409, { error: 'Could not save: close the CSV in Excel and try again.' });
   }
   // Report the on-disk values, including any spreadsheet formula escaping.

@@ -1,0 +1,65 @@
+{
+ "asOfRun": "2026-11-20T10-19-01Z-local",
+ "model": "gpt-6-luna",
+ "promptVersion": "v1",
+ "labelledAt": "2026-11-20T11:09:34.502Z",
+ "labelling": {
+  "labeller": "Claude Opus 5.5 (claude-opus-5-5), an AI model",
+  "byHand": false,
+  "ownerReviewed": 0,
+  "labelledOn": "2026-11-20",
+  "why": "The owner asked Claude Code to finish the 50-post check itself.",
+  "textUsed": "Company-board posts (10): the full post text from the board's public API, the same text as the public post. Adzuna posts (40): the API snippet (up to 500 characters) with the title, company and location. adzuna.in refuses automated requests, so the full Adzuna pages were not read.",
+  "blind": "Labelled from a pack built from the raw collected posts, with no tags or predictions in it. eval/pred_50.json was not opened before this file and eval/labels_50.csv were committed.",
+  "limits": [
+   "Not a hand check: an AI model made every label.",
+   "The same AI session wrote the tagging prompt and the guideline, so the labels are not independent of the design.",
+   "For the 40 Adzuna posts the labeller saw only the snippet the tagger saw, so facts that appear only in the full post are not checked."
+  ]
+ },
+ "accuracy": {
+  "both": {
+   "correct": 42,
+   "total": 50,
+   "low": 0.715,
+   "high": 0.917
+  },
+  "role": {
+   "correct": 45,
+   "total": 50,
+   "low": 0.786,
+   "high": 0.957
+  },
+  "city": {
+   "correct": 45,
+   "total": 50,
+   "low": 0.786,
+   "high": 0.957
+  }
+ },
+ "fresherShareBySource": {
+  "greenhouse": {
+   "correct": 7,
+   "total": 7,
+   "low": 0.646,
+   "high": 1
+  },
+  "adzuna": {
+   "correct": 38,
+   "total": 40,
+   "low": 0.835,
+   "high": 0.986
+  },
+  "lever": {
+   "correct": 3,
+   "total": 3,
+   "low": 0.438,
+   "high": 1
+  }
+ },
+ "llmCallsInRun": 1753,
+ "postsTaggedInRun": 1713,
+ "costUsdRun": 0.2012,
+ "costPer1000Tagged": 0.1175,
+ "costPer1000Shown": 0.6799
+}

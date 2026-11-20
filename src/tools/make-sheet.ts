@@ -36,7 +36,7 @@ const about: Sheet = {
 const sheets: Sheet[] = [about];
 const csvTabs = [
   { name: 'Posts', file: 'posts.csv', description: 'Published jobs and internships, with attribution.' },
-  { name: 'Hand-check 50', file: 'handcheck_50.csv', description: 'Predictions and human labels for the 50-post check.' },
+  { name: '50-post check', file: 'handcheck_50.csv', description: 'Predictions and labels for the 50-post check. Who labelled, and from what text: the "labelled by" rows on the Numbers tab.' },
   { name: 'Numbers', file: 'numbers.csv', description: 'Accuracy, confidence intervals and tagging costs.' },
   { name: 'Sources', file: 'sources.csv', description: 'Source permissions, attribution and per-source funnel counts.' },
   { name: 'Runs', file: 'runs.csv', description: 'Refresh history, status and cost.' },

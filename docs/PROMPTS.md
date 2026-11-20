@@ -4,7 +4,7 @@ The brief asks for the AI tools and the prompts used. This file has three parts.
 
 ## 1. My prompts (Avinash): where I steered or corrected the AI
 
-_(Avinash: these are my prompts to Claude Code, word for word in Hinglish, oldest first, with an English gloss. Check the selection and edit it if you like.)_
+My prompts to Claude Code, word for word in Hinglish, oldest first, with an English gloss.
 
 | # | My prompt (verbatim) | In English | What it changed |
 |---|---|---|---|
@@ -18,12 +18,13 @@ _(Avinash: these are my prompts to Claude Code, word for word in Hinglish, oldes
 | 8 | "tum khud all work kr sakte ho ... tumko batao mere se kya chahiye" | Do all the work yourself; tell me only what you need from me. | Setup scripts for Supabase, Cloudflare and GitHub secrets; the asks shrank to account sign-ups. |
 | 9 | "GPT BALE API USE KR RAHE HO YA NAHI DEVELOPMENT USHI SE KRWANA H" | Are you using the GPT APIs? Development should be done with them. | More of the coding went to gpt-6.2-sol: the labelling tool, the workbook builder, fixes. |
 | 10 | "DEVELOPMENT CHAL RAHA H YA NHAI CHATGPT SE - ADMIN PANEL USER PANEL - OR DESIGN BHI ACHHA HONA CHAHIYE OR KAM KA SPEED BADHA DO" | Is GPT doing the development? The design must be good too, and speed things up. | A design pass from screenshots, a second independent review, and parallel workers. |
+| 11 | "labeling ME NAHI SAMJHA / TUM APNA KAM 100% COMPLETE KRKE BATAO" | I didn't follow the labelling; finish the work yourself and report back. | Claude Code labelled the 50-post check, and every figure is marked "AI labels, not by hand" (`eval/labelling.json`). |
 
 ## 2. Tools
 
 | Tool | Model | Used for |
 |---|---|---|
-| Claude Code | Claude Opus 5.5 | Lead: research, plan, pipeline code, integration, tests, deploy |
+| Claude Code | Claude Opus 5.5 | Lead: research, plan, pipeline code, integration, tests, deploy; the labels for the 50-post check |
 | `src/tools/gpt-worker.ts` (Azure OpenAI Responses API) | gpt-6.2-sol | Front-end: the page, the user panel and the admin panel |
 | `src/tools/gpt-worker.ts` (Azure OpenAI Responses API) | gpt-6.2-astra | Independent code reviews |
 | Azure OpenAI (in the product) | gpt-6-luna | Tagging each post: role, cities, fresher facts |
@@ -34,6 +35,10 @@ Codex CLI 0.171 was set up for the two GPT workers first, but on Windows it coul
 
 ### Tagging prompt (in the product)
 `prompts/tag.md`, version `v1`. `config/model.yaml` names the file and the version.
+
+### The 50-post check labels (Claude Opus 5.5), 2026-11-20 16:40 IST
+
+No prompt was sent to another model. Claude Code built a label pack from the raw collected posts (title, company, location, employment type and the post text; no tags, no predictions), read all 50 posts, and labelled each by `eval/GUIDELINE.md`, with a one-line note where a call was close. The labels went through the labelling form's API, so the form's checks applied. `eval/labelling.json` and `eval/report.md` say who labelled, what text was used and the limits.
 
 ### Design pass (gpt-6.2-sol, with screenshots), 2026-11-20 16:00 IST
 
