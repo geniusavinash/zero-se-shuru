@@ -65,6 +65,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink); overflow-wrap: anywhere; }
+/* The footer sits at the bottom of the window on short pages (panels, privacy) instead of leaving a band below it. */
+body:has(> .site-footer) { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+body:has(> .site-footer) > main { flex: 1 0 auto; }
 .wrap { width: min(calc(100% - 1.5rem), 74rem); margin-inline: auto; min-width: 0; }
 main { padding-block: clamp(1rem, 3vw, 2.25rem) clamp(2rem, 5vw, 4rem); }
 h1, h2, h3 { margin: 0 0 .65rem; line-height: 1.17; text-wrap: balance; }

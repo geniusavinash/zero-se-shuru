@@ -9,6 +9,12 @@ interface Sheet {
   headers: string[];
   rows: string[][];
   wrapColumn?: string;
+  /** A column whose cells are formulas (text without "="), e.g. IMAGE("https://…") on the Screenshots tab. */
+  formulaColumn?: string;
+  /** Height of every data row, in points (the Screenshots tab needs room for the picture). */
+  rowHeight?: number;
+  /** Fixed column widths, in characters, by header. */
+  widths?: Record<string, number>;
 }
 
 const out = '.cache/exports';
@@ -54,6 +60,29 @@ for (const { name, file, description } of csvTabs) {
   const headers = Object.keys(records[0] ?? parseCsv(`${text}\n__header_probe__`)[0] ?? {});
   if (headers.length === 0) throw new Error(`No CSV header in ${path}`);
   sheets.push({ name, description, headers, rows: records.map((r) => headers.map((h) => r[h] ?? '')) });
+}
+
+// Screenshots of the live site, listed in site/screenshots/screenshots.json. The pictures are served by the
+// site itself, so Google Sheets' IMAGE() shows them in the cell, and the link opens the full size.
+const shotsPath = 'site/screenshots/screenshots.json';
+if (existsSync(shotsPath)) {
+  const shots = JSON.parse(read(shotsPath)) as { file: string; screen: string; shows: string }[];
+  const base = String(meta.site.publicUrl).replace(/\/+$/, '');
+  const shotSheet: Sheet = {
+    name: 'Screenshots',
+    description: 'The live site and both panels. In Google Sheets the picture shows in the cell; the link opens it full size.',
+    headers: ['n', 'screen', 'what it shows', 'link', 'picture'],
+    rows: shots.map((s, i) => {
+      const url = `${base}/screenshots/${encodeURIComponent(s.file)}`;
+      return [String(i + 1), s.screen, s.shows, url, `IMAGE("${url}")`];
+    }),
+    formulaColumn: 'picture',
+    wrapColumn: 'what it shows',
+    rowHeight: 240,
+    widths: { n: 4, screen: 26, 'what it shows': 46, link: 30, picture: 66 },
+  };
+  const at = sheets.findIndex((s) => s.name === 'Numbers');
+  sheets.splice(at >= 0 ? at + 1 : sheets.length, 0, shotSheet);
 }
 
 const docs = read('docs/PROMPTS.md');
@@ -156,17 +185,20 @@ function sheetXml(sheet: Sheet): string {
       const wrap = headers[j] === sheet.wrapColumn || value.length > 60;
       const style = i === 0 ? (wrap ? 3 : 1) : (wrap ? 2 : 0);
       const attrs = `r="${ref}" s="${style}"`;
+      if (i > 0 && headers[j] === sheet.formulaColumn && value !== '') return `<c ${attrs}><f>${xml(value)}</f></c>`;
       const numeric = i > 0 && !textOnly[j] && /^-?\d+(\.\d+)?$/.test(value) && Number.isFinite(Number(value));
       return numeric
         ? `<c ${attrs}><v>${value}</v></c>`
         : `<c ${attrs} t="inlineStr"><is><t xml:space="preserve">${xml(value)}</t></is></c>`;
     }).join('');
-    return `<row r="${rowNum}">${cells}</row>`;
+    const height = i > 0 && sheet.rowHeight ? ` ht="${sheet.rowHeight}" customHeight="1"` : '';
+    return `<row r="${rowNum}"${height}>${cells}</row>`;
   }).join('');
   const range = `A1:${columnName(headers.length - 1)}${rows.length + 1}`;
-  const cols = widths.map((width, i) =>
-    `<col min="${i + 1}" max="${i + 1}" width="${Math.max(8, Math.min(60, width + 2))}" customWidth="1"/>`,
-  ).join('');
+  const cols = widths.map((width, i) => {
+    const fixed = sheet.widths?.[headers[i] ?? ''];
+    return `<col min="${i + 1}" max="${i + 1}" width="${fixed ?? Math.max(8, Math.min(60, width + 2))}" customWidth="1"/>`;
+  }).join('');
   return `${declaration}<worksheet xmlns="${mainNs}"><dimension ref="${range}"/><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A2" sqref="A2"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>${cols}</cols><sheetData>${data}</sheetData><autoFilter ref="${range}"/></worksheet>`;
 }
 
