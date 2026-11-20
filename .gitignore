@@ -8,3 +8,4 @@ site/js/config.js
 eval/private_labels.csv
 eval/*.tmp
 *.log
+eval/private_labels_human.csv

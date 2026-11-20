@@ -10,19 +10,21 @@ import { loadConfig } from '../config.ts';
 import { cityIds, LABELS, PREDICTIONS, readCsv, SAMPLE, wilson } from './common.ts';
 
 /** Who made the labels and from what text; shown with every figure, so an AI check is never passed off as a hand check. */
-const LABELLING = 'eval/labelling.json';
+const LABELLING = process.env.LABELLING_IN ?? 'eval/labelling.json';
+/** The labels to score (default eval/labels_50.csv); a second labeller's file can be scored instead. */
+const LABELS_IN = process.env.LABELS_IN ?? LABELS;
 type Labelling = { labeller: string; byHand: boolean; ownerReviewed: number; textUsed: string; blind: string; limits: string[] };
 
 const cfg = loadConfig();
 const git = (...args: string[]): string => execFileSync('git', args, { encoding: 'utf8' }).trim();
 if (!process.argv.includes('--no-git-check')) {
-  if (git('log', '--oneline', '--', LABELS) === '') throw new Error(`${LABELS} is not committed yet. Commit it first: that commit is the proof the labels came before the score.`);
-  if (git('status', '--porcelain', '--', LABELS) !== '') throw new Error(`${LABELS} has changes that are not committed.`);
+  if (git('log', '--oneline', '--', LABELS_IN) === '') throw new Error(`${LABELS_IN} is not committed yet. Commit it first: that commit is the proof the labels came before the score.`);
+  if (git('status', '--porcelain', '--', LABELS_IN) !== '') throw new Error(`${LABELS_IN} has changes that are not committed.`);
   if (existsSync(LABELLING) && git('status', '--porcelain', '--', LABELLING) !== '') throw new Error(`${LABELLING} has changes that are not committed.`);
 }
 const sample = JSON.parse(readFileSync(SAMPLE, 'utf8')) as { runId: string; shown: number; model: string; promptVersion: string };
 const pred = JSON.parse(readFileSync(PREDICTIONS, 'utf8')) as Record<string, { role: string; cities: string[]; source: string }>;
-const labels = readCsv(LABELS);
+const labels = readCsv(LABELS_IN);
 const labelling = existsSync(LABELLING) ? (JSON.parse(readFileSync(LABELLING, 'utf8')) as Labelling) : null;
 
 const C = (correct: number, total: number) => ({ correct, total, ...wilson(correct, total) });
@@ -50,6 +52,44 @@ for (const l of labels) {
 }
 const n = labels.length;
 
+// A second set of labels (for example the AI labels, when the main set is the owner's own), scored the
+// same way, and how often the two labellers agree with each other.
+const BASELINE = process.env.BASELINE_LABELS;
+const sameSet = (x: string[], y: string[]): boolean => x.length === y.length && x.every((c, i) => c === y[i]);
+type Interval = ReturnType<typeof C>;
+let baseline: null | { labeller: string; file: string; accuracy: Record<'both' | 'role' | 'city', Interval>; agreement: Record<'role' | 'city', Interval> } = null;
+if (BASELINE) {
+  const base = new Map(readCsv(BASELINE).map((r) => [r.key ?? '', r]));
+  let bRole = 0;
+  let bCity = 0;
+  let bBoth = 0;
+  let aRole = 0;
+  let aCity = 0;
+  let m = 0;
+  for (const l of labels) {
+    const b = base.get(l.key ?? '');
+    const p = pred[l.key ?? ''];
+    if (!b || !p) continue;
+    m++;
+    const bc = cityIds(b.label_cities ?? '', cfg.taxonomy);
+    const lc = cityIds(l.label_cities ?? '', cfg.taxonomy);
+    const pc = [...p.cities].filter((c) => c !== '').sort();
+    const roleOk = b.label_role === p.role;
+    const cityOk = sameSet(bc, pc);
+    if (roleOk) bRole++;
+    if (cityOk) bCity++;
+    if (roleOk && cityOk) bBoth++;
+    if (b.label_role === l.label_role) aRole++;
+    if (sameSet(bc, lc)) aCity++;
+  }
+  baseline = {
+    labeller: process.env.BASELINE_LABELLER ?? 'the other labeller',
+    file: BASELINE,
+    accuracy: { both: C(bBoth, m), role: C(bRole, m), city: C(bCity, m) },
+    agreement: { role: C(aRole, m), city: C(aCity, m) },
+  };
+}
+
 // Cost of the measured run, from the call log.
 const calls = existsSync('data/llm_calls.jsonl')
   ? readFileSync('data/llm_calls.jsonl', 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { run: string; post: string; costUsd: number; input: number; cachedInput: number; output: number })
@@ -65,6 +105,7 @@ const metrics = {
   promptVersion: sample.promptVersion,
   labelledAt: new Date().toISOString(),
   labelling,
+  baseline,
   accuracy: { both: C(both, n), role: C(role, n), city: C(city, n) },
   fresherShareBySource: Object.fromEntries(Object.entries(fresherBy).map(([s, v]) => [s, C(v.yes, v.total)])),
   llmCallsInRun: runCalls.length,
@@ -104,6 +145,16 @@ const report = [
   '',
   `Cost of the measured run: $${metrics.costUsdRun} for ${posts} posts tagged (${runCalls.length} calls) → $${metrics.costPer1000Tagged} per 1,000 posts tagged${metrics.costPer1000Shown ? `, $${metrics.costPer1000Shown} per 1,000 posts shown` : ''}.`,
   '',
+  ...(baseline
+    ? [
+        `## Second labeller: ${baseline.labeller} (${baseline.file})`,
+        '',
+        `Scored the same way: role and city both right ${pct(baseline.accuracy.both)}; role ${pct(baseline.accuracy.role)}; city ${pct(baseline.accuracy.city)}.`,
+        '',
+        `The two labellers agree on the role for ${pct(baseline.agreement.role)} of the posts, and on the cities for ${pct(baseline.agreement.city)}.`,
+        '',
+      ]
+    : []),
   `## Misses (${misses.length})`,
   '',
   '| Post | Source | Role (shown → label) | Cities (shown → label) |',
