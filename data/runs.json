@@ -1,5 +1,36 @@
 [
  {
+  "id": "2026-11-27T22-18-12Z-schedule",
+  "startedAt": "2026-11-27T22:18:12.970Z",
+  "finishedAt": "2026-11-27T22:21:46.696Z",
+  "trigger": "schedule",
+  "ok": true,
+  "newPosts": 40,
+  "model": "gpt-6-luna",
+  "promptVersion": "v1",
+  "counts": {
+   "read": 23857,
+   "india": 6374,
+   "candidates": 1682,
+   "tagged": 1682,
+   "eligible": 324,
+   "afterDedupe": 289,
+   "shown": 289,
+   "duplicates": 35,
+   "cityMismatch": 10
+  },
+  "perSource": {},
+  "llm": {
+   "calls": 143,
+   "cacheHits": 1539,
+   "failed": 0,
+   "input": 365007,
+   "cachedInput": 339499,
+   "output": 18844,
+   "costUsd": 0.015367790000000003
+  }
+ },
+ {
   "id": "2026-11-27T09-02-10Z-schedule",
   "startedAt": "2026-11-27T09:02:10.767Z",
   "finishedAt": "2026-11-27T09:05:57.260Z",
